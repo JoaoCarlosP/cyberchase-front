@@ -42,6 +42,7 @@ export class Repository {
   ): Promise<IResponseBase<T>> {
     try {
       const response: AxiosResponse = await request()
+
       return response
     } catch (err: any) {
       if (axios.isCancel(err)) throw err

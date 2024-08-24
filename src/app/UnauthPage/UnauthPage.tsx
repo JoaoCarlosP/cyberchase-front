@@ -1,9 +1,29 @@
 import { useForm } from 'antd/es/form/Form'
 import styles from './UnauthPage.module.scss'
-import { Form } from 'antd'
+import { Button, Col, Form, Input, Row } from 'antd'
 import UnauthRepository from '../../repositories/UnauthRepository'
 
 function UnauthPage() {
+  return (
+    <main className={styles.container}>
+      <Row className={styles.row}>
+        <Col xs={0} md={12} xl={16}>
+          <img
+            alt="Fatec"
+            className={styles.image}
+            src="src/assets/fatec.png"
+          />
+        </Col>
+
+        <Col xs={24} md={12} xl={8}>
+          <LoginSection />
+        </Col>
+      </Row>
+    </main>
+  )
+}
+
+function LoginSection() {
   const [formRef] = useForm()
 
   const onSubmit = async (data: any) => {
@@ -16,53 +36,70 @@ function UnauthPage() {
   }
 
   return (
-    <main className={styles.login}>
-      <div className={styles.imageContainer}>
-        <img src="src/assets/fatec.png" alt="Fatec" className={styles.image} />
-        <div className={styles.overlay}></div>
-      </div>
-
-      <Form form={formRef} className={styles.form} onFinish={onSubmit}>
+    <Form
+      form={formRef}
+      layout='vertical'
+      onFinish={onSubmit}
+      className={styles.form}
+    >
+      <section className={styles.formOverlay}>
         <h2 className={styles.title}>BEM VINDO!</h2>
-        <p className={styles.subtitle}>Faça o login.</p>
+        <p className={styles.subtitle}>Preencha os campos para acessar sua conta</p>
 
-        <label htmlFor="email" className={styles.label}>Email:</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          className={styles.input}
-          required
-        />
+        <Form.Item
+          name='email'
+          label='E-mail'
+        >
+          <Input
+            required
+            type='email'
+            placeholder='Insira o e-mail'
+          />
+        </Form.Item>
 
-        <label htmlFor="senha" className={styles.label}>Senha:</label>
-        <input
-          type="password"
-          name="senha"
-          id="senha"
-          className={styles.input}
-          style={{ marginBottom: '0.8rem' }}
-          required
-        />
+        <Form.Item
+          label='Senha'
+          name='password'
+          style={{ marginBottom: 8 }}
+        >
+          <Input
+            required
+            type='password'
+            placeholder='Insira o e-mail'
+          />
+        </Form.Item>
 
-        <button type='button' className={styles.forgotPasswordButton}>
-          <b>Esqueci minha senha</b>
-        </button>
-        
-        <button type="submit" className={styles.loginButton}>Entrar</button>
-        
+        <Button
+          type='link'
+          htmlType='button'
+          className={styles.forgotPasswordButton}
+        >
+          Esqueci minha senha
+        </Button>
+
+        <Button
+          type='primary'
+          htmlType="submit"
+          className={styles.loginButton}
+        >
+          Entrar
+        </Button>
+
         <aside className={styles.dividerContainer}>
           <div className={styles.divider}></div>
           <span className={styles.alternativeAccess}>Ou baixe o jogo!</span>
           <div className={styles.divider}></div>
         </aside>
 
-        <button type="button" className={styles.downloadGameButton}>
+        <Button
+          type='default'
+          htmlType="button"
+          className={styles.downloadGameButton}
+        >
           Baixar jogo
-        </button>
-          
-      </Form>
-    </main>
+        </Button>
+      </section>
+    </Form>
   )
 }
 

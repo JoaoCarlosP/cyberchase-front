@@ -1,9 +1,10 @@
 @use './mixins.scss' as mixins;
 @import './variables.scss';
+@import './antd.scss';
 
 html {
   background-color: var(--background-color);
-  font-family: 'Baloo 2', sans-serif;
+  font-family: var(--font-family);
 
   * {
     margin: 0;

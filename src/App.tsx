@@ -6,7 +6,7 @@ import './styles/index.scss'
 
 function App() {
   return (
-    <BrowserRouter>    
+    <BrowserRouter>
       <HttpsRedirect>
         <RootRoutes />
       </HttpsRedirect>

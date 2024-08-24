@@ -1,7 +1,9 @@
 import { useForm } from 'antd/es/form/Form'
 import styles from './UnauthPage.module.scss'
 import { Button, Col, Form, Input, Row } from 'antd'
-import UnauthRepository from '../../repositories/UnauthRepository'
+// import UnauthRepository from '../../repositories/UnauthRepository'
+import { useNavigate } from 'react-router-dom'
+import { Path } from '../../routes/constants'
 
 function UnauthPage() {
   return (
@@ -25,15 +27,9 @@ function UnauthPage() {
 
 function LoginSection() {
   const [formRef] = useForm()
+  const navigate = useNavigate()
 
-  const onSubmit = async (data: any) => {
-    try {
-      const response = await UnauthRepository.login(data)
-      console.log(response)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const onSubmit = () => navigate(Path.menu)
 
   return (
     <Form

@@ -1,4 +1,5 @@
 export enum Path {
   unauth = '/',
-  menu = '/menu'
+  menu = '/menu',
+  questionForm = '/question-form/:questionId?'
 }

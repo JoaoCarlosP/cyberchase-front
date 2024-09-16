@@ -1,0 +1,51 @@
+.container {
+  padding: 2rem 2rem 3rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.mainTitle,
+.title,
+.resourceTitle {
+  font-weight: 600;
+  color: black;
+  font-size: 1.875rem;
+}
+
+.title,
+.resourceTitle {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.resourceTitle {
+  margin-top: 1rem;
+}
+
+.lastSection {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.button {
+  margin-top: 1rem;
+  text-align: center;
+}

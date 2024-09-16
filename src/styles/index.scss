@@ -4,12 +4,12 @@
 
 html {
   background-color: var(--background-color);
-  font-family: var(--font-family);
 
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: var(--font-family);
   }
 
   body {

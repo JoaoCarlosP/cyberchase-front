@@ -1,7 +1,6 @@
 .ant-btn {
   height: 45px;
   text-align: center;
-  width: 100%;
 
   border-radius: 0.5rem;
   border: none;
@@ -52,13 +51,19 @@
 
 .ant-form-item-label {
   font-size: 1rem;
-  padding-bottom: 5px;
+  padding-bottom: 5px !important;
   color: var(--text-color);
 }
 
-.ant-input {
-  border: 1px solid var(--weak-text-color);
-  height: 40px;
-  border-radius: 0.5rem;
-  padding: 0 1rem;
+.ant-input,
+.ant-select-selector {
+  border: 1px solid var(--weak-text-color) !important;
+  height: 40px !important;
+  border-radius: 0.5rem !important;
+  padding: 0 1rem !important;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ant-radio-inner {
+  border: 1px solid var(--weak-text-color) !important;
 }

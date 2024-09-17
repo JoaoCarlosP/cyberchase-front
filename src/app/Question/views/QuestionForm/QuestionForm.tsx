@@ -1,23 +1,31 @@
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { ALTERNATIVES, CREATE_TEXT, EDIT_TEXT } from "../../questionConstants"
 import { useForm } from "antd/es/form/Form"
 import { Button, Col, Form, Input, Radio, Row, Select } from "antd"
 
 import styles from './QuestionForm.module.scss'
+import defaultStyles from '../../../../styles/default.module.scss'
+import Header from "../../../../components/Header/Header"
+import { Path } from "../../../../routes/constants"
 
 function QuestionForm() {
   const { questionId } = useParams()
+  const navigate = useNavigate()
+
   const header = {
     title: questionId ? EDIT_TEXT.title : CREATE_TEXT.title,
     subtitle: questionId ? EDIT_TEXT.subtitle : CREATE_TEXT.subtitle
   }
 
+  const onBack = () => navigate(Path.menu)
+
   return (
-    <main className={styles.container}>
-      <header className={styles.header}>
-        <h3 className={styles.mainTitle}>{header.title}</h3>
-        <p>{header.subtitle}</p>
-      </header>
+    <main className={defaultStyles.container}>
+      <Header
+        onBack={onBack}
+        title={header.title}
+        subtitle={header.subtitle}
+      />
 
       <FormBuild />
     </main>

@@ -1,0 +1,13 @@
+.filter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.filter input {
+  width: 400px;
+}
+
+.filter div {
+  width: 175px;
+}

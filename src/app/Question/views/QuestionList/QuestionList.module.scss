@@ -4,10 +4,39 @@
   justify-content: space-between;
 }
 
-.filter input {
+.inputSearch {
   width: 400px;
 }
 
-.filter div {
-  width: 175px;
+.buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  button {
+    height: 40px !important;
+  }
+}
+
+.filterButton {
+  padding: 0.5rem 0.75rem;
+}
+
+.addButton {
+  padding: 0 1rem;
+}
+
+.questionTable {
+
+  & table {
+    & thead tr th {
+      background-color: transparent !important;
+      border-bottom: none !important;
+      padding: 0.75rem 1rem !important;
+
+      &::before {
+        height: 0 !important;
+      }
+    }
+  }
 }

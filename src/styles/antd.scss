@@ -7,7 +7,7 @@
   cursor: pointer;
 
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
 
   &:hover {
     filter: brightness(75%);
@@ -55,7 +55,7 @@
   color: var(--text-color);
 }
 
-.ant-input,
+.ant-input-outlined,
 .ant-select-selector {
   border: 1px solid var(--weak-text-color) !important;
   height: 40px !important;

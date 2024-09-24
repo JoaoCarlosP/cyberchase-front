@@ -1,11 +1,45 @@
-.filter {
+@use 'src/styles/mixins.scss' as mixins;
+
+.background {
+  background: linear-gradient(45deg, var(--dark-primary-color), var(--primary-color));
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 3rem;
+}
+
+.contentContainer {
+  background-color: white;
+  border-radius: 12px 12px 0 0;
+  height: 100%;
+  padding: 3rem 3.5rem;
+  width: 100%;
+
+  @include mixins.tablet {
+    padding: 2.5rem 2rem;
+  }
+}
+
+.interactiveContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  gap: 0.75rem;
+
+  @include mixins.phone {
+    flex-direction: column;
+  }
 }
 
 .inputSearch {
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
+
+  @include mixins.phone {
+    max-width: 100%;
+  }
 }
 
 .buttons {
@@ -27,7 +61,6 @@
 }
 
 .questionTable {
-
   & table {
     & thead tr th {
       background-color: transparent !important;
@@ -39,4 +72,20 @@
       }
     }
   }
+}
+
+.identificador {
+  white-space: nowrap;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.actions {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 0.5rem
 }

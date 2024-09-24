@@ -20,11 +20,11 @@
 }
 
 .ant-btn-link {
-  height: auto;
-  display: inline !important;
-  font-weight: normal;
-  color: var(--weak-text-color);
   padding: 0;
+  height: auto;
+  font-weight: normal;
+  display: inline !important;
+  color: var(--weak-text-color);
 
   &:hover {
     color: var(--weak-text-color) !important;

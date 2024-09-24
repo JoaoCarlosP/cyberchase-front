@@ -40,6 +40,7 @@ function QuestionList() {
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
   const onBack = () => navigate(Path.menu)
+  const onGoForm = () => navigate(Path.questionForm)
 
   return (
     <main className={styles.background}>
@@ -55,10 +56,10 @@ function QuestionList() {
 
           <div className={styles.buttons}>
             <Button type='default' className={styles.filterButton}>
-              <FunnelSimple size={20} />
+              <FunnelSimple size={18} />
             </Button>
 
-            <Button type="primary" className={styles.addButton}>
+            <Button type="primary" className={styles.addButton} onClick={onGoForm}>
               Adicionar
             </Button>
           </div>

@@ -6,7 +6,6 @@ import { Button, Col, Form, Input, Radio, Row, Select } from "antd"
 import styles from './QuestionForm.module.scss'
 import defaultStyles from '../../../../styles/default.module.scss'
 import Header from "../../../../components/Header/Header"
-import { Path } from "../../../../routes/constants"
 
 function QuestionForm() {
   const { questionId } = useParams()
@@ -17,7 +16,7 @@ function QuestionForm() {
     subtitle: questionId ? EDIT_TEXT.subtitle : CREATE_TEXT.subtitle
   }
 
-  const onBack = () => navigate(Path.menu)
+  const onBack = () => navigate(-1)
 
   return (
     <main className={defaultStyles.container}>

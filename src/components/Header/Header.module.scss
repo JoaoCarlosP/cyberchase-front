@@ -20,4 +20,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  transition: transform 0.3s ease, background-color 0.2s ease;
+
+  &:hover {
+    transform: translateX(-10px) scale(1.05);
+  }
 }

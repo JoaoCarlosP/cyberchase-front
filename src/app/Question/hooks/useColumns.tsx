@@ -17,7 +17,8 @@ const useColumns = () => {
       key: 'disciplina',
       title: 'Disciplina',
       dataIndex: 'disciplina',
-      width: 70
+      width: 70,
+      render: (data) => (<span className={styleList.disciplinaTag}>{data}</span>)
     },
     {
       key: 'identificador',

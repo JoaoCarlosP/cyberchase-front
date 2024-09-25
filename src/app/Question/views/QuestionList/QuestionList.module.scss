@@ -68,20 +68,6 @@
   padding: 0 1rem;
 }
 
-.questionTable {
-  & table {
-    & thead tr th {
-      background-color: transparent !important;
-      border-bottom: none !important;
-      padding: 0.5rem 1rem !important;
-
-      &::before {
-        height: 0 !important;
-      }
-    }
-  }
-}
-
 .disciplinaTag {
   margin: auto;
   border: 1px solid var(--text-color);

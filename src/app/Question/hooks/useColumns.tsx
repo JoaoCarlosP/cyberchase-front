@@ -1,5 +1,3 @@
-import { IQuestion } from "../questionInterfaces"
-import { ColumnsType } from "antd/es/table"
 import useBreakpoint from "../../../hooks/useBreakpoint"
 import { useMemo } from "react"
 import styleList from '../views/QuestionList/QuestionList.module.scss'
@@ -12,13 +10,13 @@ const useColumns = () => {
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
 
-  const columns: ColumnsType<IQuestion> = [
+  const columns = [
     {
       key: 'disciplina',
       title: 'Disciplina',
       dataIndex: 'disciplina',
       width: 70,
-      render: (data) => (<span className={styleList.disciplinaTag}>{data}</span>)
+      render: (data: string) => (<span className={styleList.disciplinaTag}>{data}</span>)
     },
     {
       key: 'identificador',

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import Header from "../../../../components/Header/Header"
 import { Path } from "../../../../routes/constants"
-import { Button, Input, Table } from "antd"
+import { Button, Dropdown, Input } from "antd"
 import { FunnelSimple, MagnifyingGlass } from "@phosphor-icons/react"
 import styles from "./QuestionList.module.scss"
 import defaultStyles from '../../../../styles/default.module.scss'
@@ -10,6 +10,7 @@ import { IQuestion } from "../../questionInterfaces"
 import { useMemo } from "react"
 import useBreakpoint from "../../../../hooks/useBreakpoint"
 import QuestionListRules from "../../../../Rules/QuestionListRules"
+import Table from "../../../../components/Table/Table"
 
 const data: IQuestion[] = [
   {
@@ -55,9 +56,15 @@ function QuestionList() {
           />
 
           <div className={styles.buttons}>
-            <Button type='default' className={styles.filterButton}>
-              <FunnelSimple size={18} />
-            </Button>
+            <Dropdown trigger={['click']} dropdownRender={() => (
+              <article className={styles.filtersContainer}>
+
+              </article>
+            )}>
+              <Button type='default' className={styles.filterButton} onClick={(e) => e.preventDefault()}>
+                <FunnelSimple size={18} />
+              </Button>
+            </Dropdown>
 
             <Button type="primary" className={styles.addButton} onClick={onGoForm}>
               Adicionar
@@ -65,11 +72,10 @@ function QuestionList() {
           </div>
         </section>
 
-        <Table<IQuestion>
+        <Table
+          data={data}
           columns={columns}
-          dataSource={data}
-          className={styles.questionTable}
-          scroll={{ x: canUseScroll || undefined }}
+          canUseScroll={canUseScroll}
         />
       </article>
     </main>

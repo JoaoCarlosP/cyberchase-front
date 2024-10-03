@@ -55,6 +55,18 @@
   color: var(--text-color);
 }
 
+.ant-input-group {
+
+  &>.ant-input-outlined {
+    border-radius: 0.5rem 0 0 0.5rem !important;
+  }
+
+  &>.ant-input-group-addon>.ant-input-search-button {
+    height: 40px;
+    border-radius: 0 0.5rem 0.5rem 0 !important;
+  }
+}
+
 .ant-input-outlined,
 .ant-select-selector {
   border: 1px solid var(--weak-text-color) !important;

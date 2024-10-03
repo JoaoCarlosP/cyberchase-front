@@ -35,7 +35,6 @@ function FormBuild() {
   const [formRef] = useForm()
 
   return (
-
     <Form form={formRef} layout="vertical">
       <Row gutter={[20, 5]}>
         <Col span={24}>

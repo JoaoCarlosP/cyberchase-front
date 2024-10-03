@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Header from "../../../../components/Header/Header"
 import { Path } from "../../../../routes/constants"
-import { Button, Dropdown, Input } from "antd"
-import { FunnelSimple, MagnifyingGlass } from "@phosphor-icons/react"
-import styles from "./QuestionList.module.scss"
 import defaultStyles from '../../../../styles/default.module.scss'
 import useColumns from "../../hooks/useColumns"
 import { IQuestion } from "../../questionInterfaces"
@@ -11,6 +8,7 @@ import { useMemo } from "react"
 import useBreakpoint from "../../../../hooks/useBreakpoint"
 import QuestionListRules from "../../../../Rules/QuestionListRules"
 import Table from "../../../../components/Table/Table"
+import TableFilters from "../../../../components/TableFilters/TableFilters"
 
 const data: IQuestion[] = [
   {
@@ -41,36 +39,18 @@ function QuestionList() {
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
   const onBack = () => navigate(Path.menu)
-  const onGoForm = () => navigate(Path.questionForm)
+  const onGoToCreateQuestion = () => navigate(Path.questionForm.replace('/:questionId', ''))
 
   return (
-    <main className={styles.background}>
-      <article className={`${defaultStyles.container} ${styles.contentContainer}`}>
+    <main className={defaultStyles.backgroundGradient}>
+      <article className={`${defaultStyles.cardInfinity}`}>
         <Header title="Perguntas" subtitle="As perguntas de ensino têm como objetivo ajudar o aluno a aprender novos conceitos abordados em sala de aula." onBack={onBack} ></Header>
 
-        <section className={styles.interactiveContainer}>
-          <Input
-            placeholder="Search"
-            className={styles.inputSearch}
-            prefix={<MagnifyingGlass size={16} />}
-          />
-
-          <div className={styles.buttons}>
-            <Dropdown trigger={['click']} dropdownRender={() => (
-              <article className={styles.filtersContainer}>
-
-              </article>
-            )}>
-              <Button type='default' className={styles.filterButton} onClick={(e) => e.preventDefault()}>
-                <FunnelSimple size={18} />
-              </Button>
-            </Dropdown>
-
-            <Button type="primary" className={styles.addButton} onClick={onGoForm}>
-              Adicionar
-            </Button>
-          </div>
-        </section>
+        <TableFilters
+          onSearch={(value) => console.log(value)}
+          filters={<p>Aqui irá os filtros</p>}
+          onClickAdd={onGoToCreateQuestion}
+        />
 
         <Table
           data={data}

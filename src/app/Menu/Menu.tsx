@@ -10,6 +10,7 @@ function Menu() {
 
   const navigateToQuestionList = () => navigate(Path.questionList)
   const navigateToQuestionForm = () => navigate(Path.questionForm)
+  const navigateToTeacherList = () => navigate(Path.teacherList)
 
   return (
     <main className={styles.container}>
@@ -21,8 +22,12 @@ function Menu() {
           Listagem de perguntas
         </Button>
 
-        <Button type='default' className={styles.secondButton} onClick={navigateToQuestionForm}>
+        {/* <Button type='default' className={styles.secondButton} onClick={navigateToQuestionForm}>
           Adicionar nova pergunta
+        </Button> */}
+
+        <Button type='default' className={styles.secondButton} onClick={navigateToTeacherList}>
+          Listagem de Professores
         </Button>
 
         <Button

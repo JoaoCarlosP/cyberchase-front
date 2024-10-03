@@ -4,6 +4,7 @@ import UnauthPage from '../app/UnauthPage/UnauthPage'
 import Menu from '../app/Menu/Menu'
 import QuestionForm from '../app/Question/views/QuestionForm/QuestionForm'
 import QuestionList from '../app/Question/views/QuestionList/QuestionList'
+import TeacherList from '../app/Teacher/views/TeacherList/TeacherList'
 
 function RootRoutes() {
   return (
@@ -30,6 +31,12 @@ function RootRoutes() {
         key={Path.questionForm}
         path={Path.questionForm}
         element={<QuestionForm />}
+      />
+
+      <Route
+        key={Path.teacherList}
+        path={Path.teacherList}
+        element={<TeacherList />}
       />
     </Routes>
   )

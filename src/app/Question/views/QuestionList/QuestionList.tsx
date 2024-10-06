@@ -2,44 +2,42 @@ import { useNavigate } from "react-router-dom"
 import Header from "../../../../components/Header/Header"
 import { Path } from "../../../../routes/constants"
 import defaultStyles from '../../../../styles/default.module.scss'
-import useColumns from "../../hooks/useColumns"
+import useQuestionColumns from "../../hooks/useQuestionColumns"
 import { IQuestion } from "../../questionInterfaces"
-import { useMemo } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import useBreakpoint from "../../../../hooks/useBreakpoint"
 import QuestionListRules from "../../../../Rules/QuestionListRules"
 import Table from "../../../../components/Table/Table"
 import TableFilters from "../../../../components/TableFilters/TableFilters"
-
-const data: IQuestion[] = [
-  {
-    disciplina: 'PLA',
-    identificador: 'De acordo com o método Simplex, como podemos encontrar a resposta da seguinte questão abaixo?',
-    tipo: 'pa',
-    imagem: true,
-    audio: false,
-    tempo: false,
-    createdAt: '30/05/2024',
-  },
-  {
-    disciplina: 'PLA',
-    identificador: 'De acordo com o método Simplex, como podemos encontrar a resposta...',
-    tipo: 'pa',
-    imagem: true,
-    audio: false,
-    tempo: false,
-    createdAt: '30/05/2024',
-  },
-  // Add more rows as needed
-];
+import QuestionRepository from "../../../../repositories/QuestionRepository"
+import { message } from "antd"
 
 function QuestionList() {
   const navigate = useNavigate()
-  const columns = useColumns()
+  const columns = useQuestionColumns()
   const breakpoint = useBreakpoint()
+
+  const [data, setData] = useState<Array<IQuestion>>([])
+  const [loading, setLoading] = useState(false)
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
   const onBack = () => navigate(Path.menu)
   const onGoToCreateQuestion = () => navigate(Path.questionForm.replace('/:questionId', ''))
+
+  const getQuestions = useCallback(async () => {
+    try {
+      setLoading(true)
+      const response = await QuestionRepository.list()
+      if (response?.data && Array.isArray(response?.data)) setData(response?.data)
+    } catch (error: any) {
+      if (error) console.log(error)
+      if (error?.message) message.error(error.message)
+    } finally { setLoading(false) }
+  }, [])
+
+  useEffect(() => {
+    if (!data || data.length === 0) getQuestions()
+  }, [getQuestions, data])
 
   return (
     <main className={defaultStyles.backgroundGradient}>
@@ -54,6 +52,7 @@ function QuestionList() {
 
         <Table
           data={data}
+          loading={loading}
           columns={columns}
           canUseScroll={canUseScroll}
         />

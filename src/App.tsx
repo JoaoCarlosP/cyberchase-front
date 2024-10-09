@@ -3,14 +3,17 @@ import { HttpsRedirect } from './providers/HttpsRedirect'
 import RootRoutes from './routes'
 
 import './styles/index.scss'
+import { ConfigProvider } from 'antd'
 
 function App() {
   return (
-    <BrowserRouter>
-      <HttpsRedirect>
-        <RootRoutes />
-      </HttpsRedirect>
-    </BrowserRouter>
+    <ConfigProvider theme={{ hashed: false }}>
+      <BrowserRouter>
+        <HttpsRedirect>
+          <RootRoutes />
+        </HttpsRedirect>
+      </BrowserRouter>
+    </ConfigProvider>
   )
 }
 

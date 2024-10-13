@@ -23,15 +23,17 @@ const useQuestionColumns = () => {
       dataIndex: 'disciplina',
       width: 70,
       render: (data: IDisciplina) => (
-        <span
-          className={styleList.disciplinaTag}
-          style={{
-            borderColor: data.cor || '',
-            color: data.cor || ''
-          }}
-        >
-          {data.sigla}
-        </span>
+        <Tooltip title={data.nomeCompleto}>
+          <span
+            className={styleList.disciplinaTag}
+            style={{
+              borderColor: data.cor || '',
+              color: data.cor || ''
+            }}
+          >
+            {data.sigla}
+          </span>
+        </Tooltip>
       )
     },
     {

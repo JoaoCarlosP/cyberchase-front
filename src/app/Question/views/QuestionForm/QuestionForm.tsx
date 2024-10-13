@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { ALTERNATIVES, CREATE_TEXT, EDIT_TEXT } from "../../questionConstants"
+import { ALTERNATIVES, CREATE_TEXT, DISCIPLINAS_OPTIONS, EDIT_TEXT } from "../../questionConstants"
 import { useForm } from "antd/es/form/Form"
 import { Button, Col, Form, GetProp, Image, Input, message, Radio, Row, Select, Upload, UploadFile, UploadProps } from "antd"
 import styles from './QuestionForm.module.scss'
 import defaultStyles from '../../../../styles/default.module.scss'
 import Header from "../../../../components/Header/Header"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { UploadRequestOption } from 'rc-upload/lib/interface'
 import { FileImage, FileAudio } from "@phosphor-icons/react"
 
@@ -61,7 +61,18 @@ function FormBuild() {
   const [fileList, setFileList] = useState<UploadFile[]>([])
   const [fileListAudio, setFileListAudio] = useState<UploadFile[]>([])
 
+  const disciplinasOptions = useMemo(() => {
+    return DISCIPLINAS_OPTIONS.map(item => ({ label: `${item.sigla} - ${item.nomeCompleto}`, value: item.sigla }))
+  }, [])
+
+  const getDisciplinaSelected = (value: string) => {
+    const disciplina = DISCIPLINAS_OPTIONS.find(item => item.sigla === value)
+    return disciplina
+  }
+
   const onSubmit = async (values: IQuestionForm) => {
+    const disciplina = getDisciplinaSelected(values.disciplina)
+    console.log(disciplina)
     console.log(values)
   }
 
@@ -158,7 +169,12 @@ function FormBuild() {
             name='disciplina'
             label='Disciplina'
           >
-            <Select placeholder='Escolha a disciplina' />
+            <Select
+              showSearch
+              optionFilterProp="label"
+              placeholder='Escolha a disciplina'
+              options={disciplinasOptions}
+            />
           </Form.Item>
         </Col>
 
@@ -281,9 +297,9 @@ function FormBuild() {
         </Col>
 
         <Col xs={24} md={12} className={styles.item}>
-          <h4 className={styles.title}>Tempo para responder (opcional)</h4>
+          <h4 className={styles.title}>Tempo (em segundos) - Opcional</h4>
           <Form.Item name='T'>
-            <Input placeholder="Em segundos..." />
+            <Input placeholder="Em segundos..." type='number' />
           </Form.Item>
         </Col>
       </Row>

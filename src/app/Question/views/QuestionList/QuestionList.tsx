@@ -25,7 +25,6 @@ function QuestionList() {
   const onGoToCreateQuestion = () => navigate(Path.questionForm.replace('/:questionId', ''))
 
   const getQuestions = useCallback(async () => {
-    console.log('bateu')
     try {
       setLoading(true)
       const response = await QuestionRepository.list()

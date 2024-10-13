@@ -6,9 +6,8 @@ import styles from './QuestionForm.module.scss'
 import defaultStyles from '../../../../styles/default.module.scss'
 import Header from "../../../../components/Header/Header"
 import { useState } from "react"
-import { PlusOutlined } from '@ant-design/icons'
 import { UploadRequestOption } from 'rc-upload/lib/interface'
-import { FileImage } from "@phosphor-icons/react"
+import { FileImage, FileAudio } from "@phosphor-icons/react"
 
 function QuestionForm() {
   const { questionId } = useParams()
@@ -58,7 +57,9 @@ function FormBuild() {
   const [formRef] = useForm()
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
+  const [previewAudioUrl, setPreviewAudioUrl] = useState('')
   const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [fileListAudio, setFileListAudio] = useState<UploadFile[]>([])
 
   const onSubmit = async (values: IQuestionForm) => {
     console.log(values)
@@ -75,6 +76,47 @@ function FormBuild() {
 
   const handleChange: UploadProps['onChange'] = (info) => {
     setFileList(info.fileList)
+
+    if (info.fileList.length > 0) {
+      const file = info.fileList[0]
+      if (!file.url && !file.preview) {
+        getBase64(file.originFileObj as FileType).then((base64) => {
+          file.preview = base64
+          setPreviewImage(base64)
+          setPreviewOpen(true)
+          formRef.setFieldsValue({ I: base64 })
+        })
+      } else {
+        setPreviewImage(file.url || (file.preview as string))
+        setPreviewOpen(true)
+        formRef.setFieldsValue({ I: file.url || (file.preview as string) })
+      }
+    } else {
+      setPreviewImage('')
+      setPreviewOpen(false)
+      formRef.setFieldsValue({ I: null })
+    }
+  }
+
+  const handleChangeAudio: UploadProps['onChange'] = (info) => {
+    setFileListAudio(info.fileList)
+
+    if (info.fileList.length > 0) {
+      const file = info.fileList[0]
+      if (!file.url && !file.preview) {
+        getBase64(file.originFileObj as FileType).then((base64) => {
+          file.preview = base64
+          setPreviewAudioUrl(base64)
+          formRef.setFieldsValue({ A: base64 })
+        })
+      } else {
+        setPreviewAudioUrl(file.url || (file.preview as string))
+        formRef.setFieldsValue({ A: file.url || (file.preview as string) })
+      }
+    } else {
+      setPreviewAudioUrl('')
+      formRef.setFieldsValue({ A: null })
+    }
   }
 
   function customUploadRequest(options: UploadRequestOption<any>) {
@@ -149,6 +191,7 @@ function FormBuild() {
               fileList={fileList}
               maxCount={1}
               customRequest={customUploadRequest}
+              accept="image/*"
               beforeUpload={(file) => {
                 return new Promise((resolve, reject) => {
                   if (file.size > 4000000) {
@@ -169,19 +212,19 @@ function FormBuild() {
                 </Button>
               }
             </Upload>
-          </Form.Item>
 
-          {previewImage && (
-            <Image
-              wrapperStyle={{ display: 'none' }}
-              preview={{
-                visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(''),
-              }}
-              src={previewImage}
-            />
-          )}
+            {previewImage && (
+              <Image
+                wrapperStyle={{ display: 'none' }}
+                preview={{
+                  visible: previewOpen,
+                  onVisibleChange: (visible) => setPreviewOpen(visible),
+                  afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                }}
+                src={previewImage}
+              />
+            )}
+          </Form.Item>
         </Col>
 
         <Col xs={24} md={12}>
@@ -189,7 +232,40 @@ function FormBuild() {
             name='A'
             label='Áudio'
           >
-            To Do
+            <Upload
+              listType={previewAudioUrl ? 'text' : 'picture-card'}
+              fileList={fileListAudio}
+              maxCount={1}
+              accept="audio/*"
+              onPreview={() => null}
+              customRequest={customUploadRequest}
+              beforeUpload={(file) => {
+                return new Promise((resolve, reject) => {
+                  if (file.size > 10000000) {
+                    reject('Excedeu o tamanho máximo de 10MB')
+                  } else {
+                    resolve('Áudio carregado com sucesso!')
+                  }
+                })
+              }}
+              onChange={handleChangeAudio}
+            >
+              {fileListAudio.length > 0
+                ? null
+                :
+                <Button htmlType="button" style={{ width: '100%', height: '100%' }}>
+                  <FileAudio size={40} />
+                </Button>
+              }
+            </Upload>
+
+            {previewAudioUrl && (
+              <audio
+                controls
+                src={previewAudioUrl}
+                style={{ width: '100%', marginTop: '1rem' }}
+              />
+            )}
           </Form.Item>
         </Col>
 
@@ -222,5 +298,3 @@ function FormBuild() {
 }
 
 export default QuestionForm
-
-

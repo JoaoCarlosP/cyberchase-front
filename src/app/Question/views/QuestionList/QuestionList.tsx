@@ -17,7 +17,7 @@ function QuestionList() {
   const columns = useQuestionColumns()
   const breakpoint = useBreakpoint()
 
-  const [data, setData] = useState<Array<IQuestion>>([])
+  const [data, setData] = useState<Array<IQuestion> | undefined>([])
   const [loading, setLoading] = useState(false)
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
@@ -25,19 +25,22 @@ function QuestionList() {
   const onGoToCreateQuestion = () => navigate(Path.questionForm.replace('/:questionId', ''))
 
   const getQuestions = useCallback(async () => {
+    console.log('bateu')
     try {
       setLoading(true)
       const response = await QuestionRepository.list()
       if (response?.data && Array.isArray(response?.data)) setData(response?.data)
     } catch (error: any) {
+      setData(undefined)
       if (error) console.log(error)
       if (error?.message) message.error(error.message)
     } finally { setLoading(false) }
   }, [])
 
   useEffect(() => {
-    if (!data || data.length === 0) getQuestions()
-  }, [getQuestions, data])
+    getQuestions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <main className={defaultStyles.backgroundGradient}>
@@ -51,7 +54,7 @@ function QuestionList() {
         />
 
         <Table
-          data={data}
+          data={data || []}
           loading={loading}
           columns={columns}
           canUseScroll={canUseScroll}

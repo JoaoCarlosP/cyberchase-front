@@ -6,6 +6,12 @@ import { EditFilled, DeleteFilled } from '@ant-design/icons';
 import { Tooltip } from "antd"
 import { EnumQuestionType } from "../questionInterfaces";
 
+type IDisciplina = {
+  cor: string
+  nomeCompleto: string
+  sigla: string
+}
+
 const useQuestionColumns = () => {
   const breakpoint = useBreakpoint()
 
@@ -16,7 +22,17 @@ const useQuestionColumns = () => {
       title: 'Disciplina',
       dataIndex: 'disciplina',
       width: 70,
-      render: (data: string) => (<span className={styleList.disciplinaTag}>{data}</span>)
+      render: (data: IDisciplina) => (
+        <span
+          className={styleList.disciplinaTag}
+          style={{
+            borderColor: data.cor || '',
+            color: data.cor || ''
+          }}
+        >
+          {data.sigla}
+        </span>
+      )
     },
     {
       title: 'Identificador da pergunta',

@@ -10,6 +10,24 @@ export type IQuestion = {
   imagem: boolean
   audio: boolean
   tempo: boolean
-  createdAt: string
-  key: string
+  createdAt?: string
+  key?: string
+}
+
+export type IDisciplina = {
+  cor: string
+  nomeCompleto: string
+  sigla: string
+}
+
+export interface IQuestionForm {
+  disciplina?: IDisciplina
+  disciplinaValue?: string
+  tipo: string
+  I: string | number
+  A: string | number
+  T: string | number
+  C_A: string
+  descricao: string
+  arquivos?: string[]
 }

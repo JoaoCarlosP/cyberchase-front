@@ -8,6 +8,9 @@ import Header from "../../../../components/Header/Header"
 import { useMemo, useState } from "react"
 import { UploadRequestOption } from 'rc-upload/lib/interface'
 import { FileImage, FileAudio } from "@phosphor-icons/react"
+import QuestionRepository from "../../../../repositories/QuestionRepository"
+import { IQuestionForm } from "../../questionInterfaces"
+import { Path } from "../../../../routes/constants"
 
 function QuestionForm() {
   const { questionId } = useParams()
@@ -33,15 +36,6 @@ function QuestionForm() {
   )
 }
 
-interface IQuestionForm {
-  disciplina: string
-  tipo: string
-  I: string
-  A: string
-  T: string
-  C_A: string
-  descricao: string
-}
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -55,6 +49,9 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 function FormBuild() {
   const [formRef] = useForm()
+  const navigate = useNavigate()
+
+  const [loading, setLoading] = useState(false)
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewAudioUrl, setPreviewAudioUrl] = useState('')
@@ -65,15 +62,36 @@ function FormBuild() {
     return DISCIPLINAS_OPTIONS.map(item => ({ label: `${item.sigla} - ${item.nomeCompleto}`, value: item.sigla }))
   }, [])
 
-  const getDisciplinaSelected = (value: string) => {
-    const disciplina = DISCIPLINAS_OPTIONS.find(item => item.sigla === value)
-    return disciplina
+  const getDisciplinaSelected = (value?: string) => {
+    if (!value) return
+    return DISCIPLINAS_OPTIONS.find(item => item.sigla === value)
   }
 
   const onSubmit = async (values: IQuestionForm) => {
-    const disciplina = getDisciplinaSelected(values.disciplina)
-    console.log(disciplina)
-    console.log(values)
+    setLoading(true)
+    try {
+      const arquivos = []
+      if (values.I) arquivos.push(String(values.I))
+      if (values.A) arquivos.push(String(values.A))
+
+      const body = {
+        ...values,
+        disciplina: getDisciplinaSelected(values.disciplinaValue),
+        I: values.I ? 1 : 0,
+        A: values.A ? 1 : 0,
+        arquivos
+      }
+
+      delete body.disciplinaValue
+
+      await QuestionRepository.create(body)
+      message.success('Disciplina criada com sucesso!')
+
+      navigate(Path.questionList)
+
+    } catch (error: any) {
+      message.error(error?.mensagem)
+    } finally { setLoading(false) }
   }
 
   const handlePreview = async (file: UploadFile) => {
@@ -166,7 +184,7 @@ function FormBuild() {
 
         <Col xs={24} md={12}>
           <Form.Item
-            name='disciplina'
+            name='disciplinaValue'
             label='Disciplina'
           >
             <Select
@@ -305,7 +323,12 @@ function FormBuild() {
       </Row>
 
       <aside className={styles.button}>
-        <Button type='primary' style={{ paddingRight: 40, paddingLeft: 40 }} htmlType="submit">
+        <Button
+          type='primary'
+          htmlType="submit"
+          loading={loading}
+          style={{ paddingRight: 40, paddingLeft: 40 }}
+        >
           Salvar
         </Button>
       </aside>

@@ -11,6 +11,7 @@ import { FileImage, FileAudio } from "@phosphor-icons/react"
 import QuestionRepository from "../../../../repositories/QuestionRepository"
 import { IQuestionForm } from "../../questionInterfaces"
 import { Path } from "../../../../routes/constants"
+import FileRepository from "../../../../repositories/FileRepository"
 
 function QuestionForm() {
   const { questionId } = useParams()
@@ -55,7 +56,7 @@ function FormBuild() {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewAudioUrl, setPreviewAudioUrl] = useState('')
-  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const [fileListImage, setFileListImage] = useState<UploadFile[]>([])
   const [fileListAudio, setFileListAudio] = useState<UploadFile[]>([])
 
   const disciplinasOptions = useMemo(() => {
@@ -65,6 +66,22 @@ function FormBuild() {
   const getDisciplinaSelected = (value?: string) => {
     if (!value) return
     return DISCIPLINAS_OPTIONS.find(item => item.sigla === value)
+  }
+
+  const createFile = async (file: string, nome: string, questionId: string) => {
+    try {
+      const data = {
+        pergunta: questionId,
+        base64: file,
+        nome: nome
+      }
+
+      await FileRepository.create(data)
+      return true
+    } catch (error: any) {
+      console.log(error.message)
+      message.error(error.message)
+    }
   }
 
   const onSubmit = async (values: IQuestionForm) => {
@@ -79,16 +96,19 @@ function FormBuild() {
         disciplina: getDisciplinaSelected(values.disciplinaValue),
         I: values.I ? 1 : 0,
         A: values.A ? 1 : 0,
-        arquivos
+        arquivos: []
       }
 
       delete body.disciplinaValue
 
-      await QuestionRepository.create(body)
+      const response: any = await QuestionRepository.create(body)
+      const perguntaId = response?.data?.id || null
+
+      if (values.I) await createFile(String(values.I), fileListImage[0].name, perguntaId)
+      if (values.A) await createFile(String(values.A), fileListAudio[0].name, perguntaId)
+
       message.success('Disciplina criada com sucesso!')
-
       navigate(Path.questionList)
-
     } catch (error: any) {
       message.error(error?.mensagem)
     } finally { setLoading(false) }
@@ -104,10 +124,11 @@ function FormBuild() {
   }
 
   const handleChange: UploadProps['onChange'] = (info) => {
-    setFileList(info.fileList)
+    setFileListImage(info.fileList)
 
     if (info.fileList.length > 0) {
       const file = info.fileList[0]
+      console.log(file)
       if (!file.url && !file.preview) {
         getBase64(file.originFileObj as FileType).then((base64) => {
           file.preview = base64
@@ -222,7 +243,7 @@ function FormBuild() {
           >
             <Upload
               listType="picture-card"
-              fileList={fileList}
+              fileList={fileListImage}
               maxCount={1}
               customRequest={customUploadRequest}
               accept="image/*"
@@ -238,7 +259,7 @@ function FormBuild() {
               onPreview={handlePreview}
               onChange={handleChange}
             >
-              {fileList.length > 0
+              {fileListImage.length > 0
                 ? null
                 :
                 <Button htmlType="button" style={{ width: '100%', height: '100%' }}>

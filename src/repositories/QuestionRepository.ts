@@ -15,6 +15,12 @@ class QuestionRepository extends Repository {
       this.api.post(`${this.path}`, data, config)
     )
   }
+
+  delete = async (questionId: string, config?: AxiosRequestConfig) => {
+    return this.handle(() =>
+      this.api.delete(`${this.path}/${questionId}`, config)
+    )
+  }
 }
 
 export default new QuestionRepository({

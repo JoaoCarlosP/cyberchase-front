@@ -3,14 +3,20 @@ import { useMemo } from "react"
 import styleList from '../views/QuestionList/QuestionList.module.scss'
 import QuestionListRules from "../../../Rules/QuestionListRules"
 import { EditFilled, DeleteFilled } from '@ant-design/icons';
-import { Tooltip } from "antd"
+import { Modal, Tooltip } from "antd"
 import { EnumQuestionType } from "../questionInterfaces";
-import { IDisciplina } from "../../../utils/useDisciplina";
+import { IDisciplina, useDisciplina } from "../../../utils/useDisciplina";
 
-const useQuestionColumns = () => {
+const useQuestionColumns = ({ onDelete }: { onDelete: (id: string) => void }) => {
   const breakpoint = useBreakpoint()
+  const { disciplinas } = useDisciplina()
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
+
+  const returnCurrentColorTag = (sigla: string = '') => {
+    const disciplina = disciplinas.find(item => item.sigla === sigla)
+    return disciplina?.cor || 'black'
+  }
 
   const columns = [
     {
@@ -22,8 +28,8 @@ const useQuestionColumns = () => {
           <span
             className={styleList.disciplinaTag}
             style={{
-              borderColor: data.cor || '',
-              color: data.cor || ''
+              background: returnCurrentColorTag(data.sigla),
+              color: 'white'
             }}
           >
             {data.sigla}
@@ -52,8 +58,10 @@ const useQuestionColumns = () => {
       dataIndex: 'tipo',
       render: (value: EnumQuestionType) => {
         switch (value) {
-          case EnumQuestionType.PA: return <Tooltip title='Pergunta de avaliação'>PA</Tooltip>
-          case EnumQuestionType.PE: return <Tooltip title='Pergunta de exercicio'>PE</Tooltip>
+          case EnumQuestionType.PA:
+            return <Tooltip title='Pergunta de avaliação'><span className={styleList.tipo}>PA</span></Tooltip>
+          case EnumQuestionType.PE:
+            return <Tooltip title='Pergunta de exercicio'><span className={styleList.tipo}>PE</span></Tooltip>
           default: return 'N/A'
         }
       }
@@ -80,17 +88,30 @@ const useQuestionColumns = () => {
       title: 'Ações',
       dataIndex: 'a',
       width: 55,
-      render: () => (
-        <div className={styleList.actions}>
-          <Tooltip title='Editar'>
-            <EditFilled style={{ color: 'var(--green-status)', cursor: 'pointer' }} />
-          </Tooltip>
+      render: (_: any, row: any) => {
+        const onClickDelete = () => {
+          Modal.confirm({
+            title: 'Confirmação',
+            content: 'Você tem certeza que deseja deletar essa pergunta?',
+            onOk: () => onDelete(row.id)
+          })
+        }
 
-          <Tooltip title='Deletar'>
-            <DeleteFilled style={{ color: 'var(--red-status)', cursor: 'pointer' }} />
-          </Tooltip>
-        </div>
-      )
+        return (
+          <div className={styleList.actions}>
+            <Tooltip title='Editar'>
+              <EditFilled style={{ color: 'var(--green-status)', cursor: 'pointer' }} />
+            </Tooltip>
+
+            <Tooltip title='Deletar'>
+              <DeleteFilled
+                onClick={onClickDelete}
+                style={{ color: 'var(--red-status)', cursor: 'pointer' }}
+              />
+            </Tooltip>
+          </div>
+        )
+      }
     },
   ]
 

@@ -16,7 +16,7 @@ function Table({ columns, data, canUseScroll, loading }: {
         loading={loading}
         className={styles.table}
         scroll={{ x: canUseScroll || undefined }}
-        pagination={{ pageSize: 10, showSizeChanger: false }}
+        pagination={{ total: data.length, defaultCurrent: 1, defaultPageSize: 8, showSizeChanger: false }}
       />
     </>
   )

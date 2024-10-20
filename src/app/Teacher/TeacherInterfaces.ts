@@ -1,5 +1,12 @@
 import { IDisciplina } from "../../utils/useDisciplina"
 
+export interface ITeacher {
+  nome: string,
+  disciplinas: Array<IDisciplina>
+  email: string
+  createdAt: string
+}
+
 export interface ITeacherForm {
   nome: string
   email: string

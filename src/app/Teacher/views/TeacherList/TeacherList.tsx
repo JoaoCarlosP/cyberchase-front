@@ -4,52 +4,17 @@ import Header from '../../../../components/Header/Header'
 import { useNavigate } from 'react-router-dom'
 import { Path } from '../../../../routes/constants'
 import Table from '../../../../components/Table/Table'
-import useColumns from '../../hooks/useColumns'
+import useTeacherColumns from '../../hooks/useTeacherColumns'
 import { useCallback, useEffect, useState } from 'react'
 import { message } from 'antd'
 import TeacherRepository from '../../../../repositories/TeacherRepository'
-
-interface ITeacher {
-  nome: string,
-  disciplinas: Array<{ disciplina: string, color: string }>
-  email: string
-  createdAt: string
-}
-
-const teachersMock: ITeacher[] = [
-  {
-    nome: "Maria Silva",
-    disciplinas: [
-      { disciplina: "Matemática", color: "#FF5733" },
-      { disciplina: "Física", color: "#33C1FF" }
-    ],
-    email: "maria.silva@example.com",
-    createdAt: "2023-09-12"
-  },
-  {
-    nome: "João Pereira",
-    disciplinas: [
-      { disciplina: "Química", color: "#FF33D4" },
-      { disciplina: "Biologia", color: "#33FF57" }
-    ],
-    email: "joao.pereira@example.com",
-    createdAt: "2023-05-21"
-  },
-  {
-    nome: "Ana Costa",
-    disciplinas: [
-      { disciplina: "História", color: "#F3FF33" },
-      { disciplina: "Geografia", color: "#3385FF" }
-    ],
-    email: "ana.costa@example.com",
-    createdAt: "2024-01-18"
-  }
-];
+import { ITeacher } from '../../TeacherInterfaces'
 
 
 function TeacherList() {
   const navigate = useNavigate()
-  const columns = useColumns()
+  const columns = useTeacherColumns()
+  const [data, setData] = useState<Array<ITeacher> | undefined>(undefined)
 
   const [loading, setLoading] = useState(false)
 
@@ -59,7 +24,7 @@ function TeacherList() {
     try {
       setLoading(true)
       const response = await TeacherRepository.list()
-      // if (response?.data && Array.isArray(response?.data)) setData(response?.data)
+      if (response?.data && Array.isArray(response?.data)) setData(response?.data)
       console.log(response?.data)
     } catch (error: any) {
       // setData(undefined)
@@ -92,7 +57,7 @@ function TeacherList() {
 
         <Table
           columns={columns}
-          data={teachersMock}
+          data={data || []}
           loading={loading}
         />
       </article>

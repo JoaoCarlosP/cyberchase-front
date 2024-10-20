@@ -14,8 +14,8 @@ import { message } from "antd"
 
 function QuestionList() {
   const navigate = useNavigate()
-  const columns = useQuestionColumns()
   const breakpoint = useBreakpoint()
+
 
   const [data, setData] = useState<Array<IQuestion> | undefined>([])
   const [loading, setLoading] = useState(false)
@@ -35,6 +35,20 @@ function QuestionList() {
       if (error?.message) message.error(error.message)
     } finally { setLoading(false) }
   }, [])
+
+  const onDelete = async (id: string) => {
+    try {
+      await QuestionRepository.delete(id)
+
+      message.success('Pergunta deletada com sucesso')
+      getQuestions()
+    } catch (error: any) {
+      if (error.message) message.error(error.message)
+      console.error(error)
+    }
+  }
+
+  const columns = useQuestionColumns({ onDelete })
 
   useEffect(() => {
     getQuestions()

@@ -9,7 +9,7 @@ import { useState } from "react"
 import { UploadRequestOption } from 'rc-upload/lib/interface'
 import { FileImage, FileAudio } from "@phosphor-icons/react"
 import QuestionRepository from "../../../../repositories/QuestionRepository"
-import { IQuestionForm } from "../../questionInterfaces"
+import { EnumQuestionType, IQuestionForm } from "../../questionInterfaces"
 import { Path } from "../../../../routes/constants"
 import FileRepository from "../../../../repositories/FileRepository"
 import { useDisciplina } from "../../../../utils/useDisciplina"
@@ -224,8 +224,8 @@ function FormBuild() {
             <Select
               placeholder='Escolha o tipo de pergunta'
               options={[
-                { label: 'Pergunta de Avaliação', value: 'pa' },
-                { label: 'Pergunta de Exercício', value: 'pe' }
+                { label: 'Pergunta de Avaliação', value: EnumQuestionType.PA },
+                { label: 'Pergunta de Exercício', value: EnumQuestionType.PE }
               ]}
             />
           </Form.Item>

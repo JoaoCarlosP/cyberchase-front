@@ -3,22 +3,21 @@ import { EditFilled, DeleteFilled } from '@ant-design/icons';
 import { Tooltip } from "antd"
 import dayjs from "dayjs";
 
-const useColumns = () => {
+const useTeacherColumns = () => {
   const columns = [
     {
       key: 'nome',
       title: 'Nome',
       dataIndex: 'nome',
-      width: 80
+      width: 80,
+      render: (value: string) => <Tooltip title={value}>{value}</Tooltip>
     },
     {
       key: 'disciplinas',
       title: 'Disciplinas',
       dataIndex: 'disciplinas',
       width: 80,
-      render: (disciplinas: Array<object>) => {
-        return disciplinas.map((item: any) => <span style={{ marginRight: 4 }}>{item.disciplina}</span>)
-      }
+      render: () => 'TODO'
     },
     {
       key: 'email',
@@ -57,4 +56,4 @@ const useColumns = () => {
   return columns
 }
 
-export default useColumns
+export default useTeacherColumns

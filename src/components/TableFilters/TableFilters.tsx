@@ -6,7 +6,7 @@ import styles from './TableFilters.module.scss'
 
 interface ITableFiltersProps {
   onSearch: (value: string) => void
-  filters: React.ReactNode
+  filters?: React.ReactNode
   onClickAdd: () => void
 }
 
@@ -21,7 +21,7 @@ function TableFilters({ onSearch, filters, onClickAdd }: ITableFiltersProps) {
       />
 
       <div className={styles.buttons}>
-        <Dropdown trigger={['click']} dropdownRender={() => (
+        {filters && <Dropdown trigger={['click']} dropdownRender={() => (
           <article className={styles.dropdawnFilters}>
             {filters}
           </article>
@@ -29,7 +29,7 @@ function TableFilters({ onSearch, filters, onClickAdd }: ITableFiltersProps) {
           <Button type='default' className={styles.buttonFilter} onClick={(e) => e.preventDefault()}>
             <FunnelSimple size={18} />
           </Button>
-        </Dropdown>
+        </Dropdown>}
 
         <Button type="primary" className={styles.buttonAddMore} onClick={onClickAdd}>
           Adicionar

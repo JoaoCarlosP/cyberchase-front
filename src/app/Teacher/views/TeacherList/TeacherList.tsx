@@ -50,7 +50,6 @@ function TeacherList() {
         />
 
         <TableFilters
-          filters={<></>}
           onClickAdd={onGoToCreateTeacher}
           onSearch={() => console.log('buscar')}
         />

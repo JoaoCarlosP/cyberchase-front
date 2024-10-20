@@ -5,6 +5,7 @@ import Menu from '../app/Menu/Menu'
 import QuestionForm from '../app/Question/views/QuestionForm/QuestionForm'
 import QuestionList from '../app/Question/views/QuestionList/QuestionList'
 import TeacherList from '../app/Teacher/views/TeacherList/TeacherList'
+import TeacherForm from '../app/Teacher/views/TeacherForm/TeacherForm'
 
 function RootRoutes() {
   return (
@@ -37,6 +38,12 @@ function RootRoutes() {
         key={Path.teacherList}
         path={Path.teacherList}
         element={<TeacherList />}
+      />
+
+      <Route
+        key={Path.teacherForm}
+        path={Path.teacherForm}
+        element={<TeacherForm />}
       />
     </Routes>
   )

@@ -1,17 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { ALTERNATIVES, CREATE_TEXT, DISCIPLINAS_OPTIONS, EDIT_TEXT } from "../../questionConstants"
+import { ALTERNATIVES, CREATE_TEXT, EDIT_TEXT } from "../../questionConstants"
 import { useForm } from "antd/es/form/Form"
 import { Button, Col, Form, GetProp, Image, Input, message, Radio, Row, Select, Upload, UploadFile, UploadProps } from "antd"
 import styles from './QuestionForm.module.scss'
 import defaultStyles from '../../../../styles/default.module.scss'
 import Header from "../../../../components/Header/Header"
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { UploadRequestOption } from 'rc-upload/lib/interface'
 import { FileImage, FileAudio } from "@phosphor-icons/react"
 import QuestionRepository from "../../../../repositories/QuestionRepository"
 import { IQuestionForm } from "../../questionInterfaces"
 import { Path } from "../../../../routes/constants"
 import FileRepository from "../../../../repositories/FileRepository"
+import { useDisciplina } from "../../../../utils/useDisciplina"
 
 function QuestionForm() {
   const { questionId } = useParams()
@@ -59,13 +60,11 @@ function FormBuild() {
   const [fileListImage, setFileListImage] = useState<UploadFile[]>([])
   const [fileListAudio, setFileListAudio] = useState<UploadFile[]>([])
 
-  const disciplinasOptions = useMemo(() => {
-    return DISCIPLINAS_OPTIONS.map(item => ({ label: `${item.sigla} - ${item.nomeCompleto}`, value: item.sigla }))
-  }, [])
+  const { disciplinas, options } = useDisciplina()
 
   const getDisciplinaSelected = (value?: string) => {
     if (!value) return
-    return DISCIPLINAS_OPTIONS.find(item => item.sigla === value)
+    return disciplinas.find(item => item.sigla === value)
   }
 
   const createFile = async (file: string, nome: string, questionId: string) => {
@@ -212,7 +211,7 @@ function FormBuild() {
               showSearch
               optionFilterProp="label"
               placeholder='Escolha a disciplina'
-              options={disciplinasOptions}
+              options={options}
             />
           </Form.Item>
         </Col>

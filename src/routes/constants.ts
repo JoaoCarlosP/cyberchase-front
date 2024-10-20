@@ -3,5 +3,6 @@ export enum Path {
   menu = '/menu',
   questionList = '/questions',
   questionForm = '/question-form/:questionId?',
-  teacherList = '/teacher-list'
+  teacherList = '/teacher-list',
+  teacherForm = '/teacher-form/:id?'
 }

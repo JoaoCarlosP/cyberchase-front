@@ -4,7 +4,8 @@ import styleList from '../views/QuestionList/QuestionList.module.scss'
 import QuestionListRules from "../../../Rules/QuestionListRules"
 import { EditFilled, DeleteFilled } from '@ant-design/icons';
 import { Tooltip } from "antd"
-import { EnumQuestionType, IDisciplina } from "../questionInterfaces";
+import { EnumQuestionType } from "../questionInterfaces";
+import { IDisciplina } from "../../../utils/useDisciplina";
 
 const useQuestionColumns = () => {
   const breakpoint = useBreakpoint()

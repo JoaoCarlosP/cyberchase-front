@@ -1,3 +1,5 @@
+import { IDisciplina } from "../../utils/useDisciplina"
+
 export enum EnumQuestionType {
   PA = 'avaliacao',
   PE = 'exercicio'
@@ -12,12 +14,6 @@ export type IQuestion = {
   tempo: boolean
   createdAt?: string
   key?: string
-}
-
-export type IDisciplina = {
-  cor: string
-  nomeCompleto: string
-  sigla: string
 }
 
 export interface IQuestionForm {

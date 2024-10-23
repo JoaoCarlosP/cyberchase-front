@@ -12,8 +12,10 @@ import Header from "../../../../components/Header/Header"
 import { CREATE_TEXT, EDIT_TEXT } from '../../TeacherConstants'
 
 function TeacherForm() {
-  const { id } = useParams()
+  const { id } = useParams<{ id?: string }>()
   const navigate = useNavigate()
+
+  console.log(id)
 
   const header = {
     title: id ? EDIT_TEXT.title : CREATE_TEXT.title,

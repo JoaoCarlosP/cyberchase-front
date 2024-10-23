@@ -1,9 +1,12 @@
 import styleList from '../../Question/views/QuestionList/QuestionList.module.scss'
 import { EditFilled, DeleteFilled } from '@ant-design/icons';
-import { Tooltip } from "antd"
+import { Modal, Tooltip } from "antd"
 import dayjs from "dayjs";
 
-const useTeacherColumns = () => {
+const useTeacherColumns = ({ onDelete, onEdit }: {
+  onDelete: (id: string) => void,
+  onEdit: (id: string) => void
+}) => {
   const columns = [
     {
       key: 'nome',
@@ -39,17 +42,33 @@ const useTeacherColumns = () => {
       title: 'Ações',
       dataIndex: 'a',
       width: 30,
-      render: () => (
-        <div className={styleList.actions}>
-          <Tooltip title='Editar'>
-            <EditFilled style={{ color: 'var(--green-status)', cursor: 'pointer' }} />
-          </Tooltip>
+      render: (_: any, row: any) => {
+        const onClickDelete = () => {
+          Modal.confirm({
+            title: 'Confirmação',
+            content: 'Você tem certeza que deseja deletar essa pergunta?',
+            onOk: () => onDelete(row.id)
+          })
+        }
 
-          <Tooltip title='Deletar'>
-            <DeleteFilled style={{ color: 'var(--red-status)', cursor: 'pointer' }} />
-          </Tooltip>
-        </div>
-      )
+        return (
+          <div className={styleList.actions}>
+            <Tooltip title='Editar'>
+              <EditFilled
+                onClick={() => onEdit(row.id)}
+                style={{ color: 'var(--green-status)', cursor: 'pointer' }}
+              />
+            </Tooltip>
+
+            <Tooltip title='Deletar'>
+              <DeleteFilled
+                style={{ color: 'var(--red-status)', cursor: 'pointer' }}
+                onClick={onClickDelete}
+              />
+            </Tooltip>
+          </div>
+        )
+      }
     },
   ]
 

@@ -13,7 +13,6 @@ import { ITeacher } from '../../TeacherInterfaces'
 
 function TeacherList() {
   const navigate = useNavigate()
-  const columns = useTeacherColumns()
   const [data, setData] = useState<Array<ITeacher> | undefined>(undefined)
 
   const [loading, setLoading] = useState(false)
@@ -38,7 +37,29 @@ function TeacherList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const onGoToCreateTeacher = () => navigate(Path.teacherForm.replace('/:id', ''))
+  const onGoToTeacherForm = (id?: string) => {
+    console.log(id)
+    if (id) {
+      navigate(Path.teacherForm.replace(':id?', id))
+    } else {
+      console.log('Teste')
+      navigate(Path.teacherForm.replace('/:id?', ''))
+    }
+  }
+
+  const onDelete = async (id: string) => {
+    try {
+      await TeacherRepository.delete(id)
+
+      message.success('Pergunta deletada com sucesso')
+      getTeachers()
+    } catch (error: any) {
+      if (error.message) message.error(error.message)
+      console.error(error)
+    }
+  }
+
+  const columns = useTeacherColumns({ onDelete, onEdit: onGoToTeacherForm })
 
   return (
     <main className={defaultStyles.backgroundGradient}>
@@ -50,7 +71,7 @@ function TeacherList() {
         />
 
         <TableFilters
-          onClickAdd={onGoToCreateTeacher}
+          onClickAdd={() => onGoToTeacherForm()}
           onSearch={() => console.log('buscar')}
         />
 

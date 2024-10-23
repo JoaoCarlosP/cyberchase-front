@@ -12,6 +12,7 @@ const useTeacherColumns = ({ onDelete, onEdit }: {
       key: 'nome',
       title: 'Nome',
       dataIndex: 'nome',
+      ellipsis: true,
       width: 80,
       render: (value: string) => <Tooltip title={value}>{value}</Tooltip>
     },

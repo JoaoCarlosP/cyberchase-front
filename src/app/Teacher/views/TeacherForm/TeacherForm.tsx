@@ -1,9 +1,9 @@
 import { Button, Col, Form, Input, message, Row, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useDisciplina } from '../../../../utils/useDisciplina'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TeacherRepository from '../../../../repositories/TeacherRepository'
-import { ITeacherForm } from '../../TeacherInterfaces'
+import { ITeacher, ITeacherForm } from '../../TeacherInterfaces'
 import { Path } from '../../../../routes/constants'
 
 import { useNavigate, useParams } from "react-router-dom"
@@ -14,8 +14,6 @@ import { CREATE_TEXT, EDIT_TEXT } from '../../TeacherConstants'
 function TeacherForm() {
   const { id } = useParams<{ id?: string }>()
   const navigate = useNavigate()
-
-  console.log(id)
 
   const header = {
     title: id ? EDIT_TEXT.title : CREATE_TEXT.title,
@@ -32,24 +30,25 @@ function TeacherForm() {
         subtitle={header.subtitle}
       />
 
-      <TeacherFormBody />
+      <TeacherFormBody teacherId={id} />
     </main>
   )
 }
 
 
-function TeacherFormBody() {
+function TeacherFormBody({ teacherId }: { teacherId?: string }) {
   const [formRef] = useForm()
   const navigate = useNavigate()
 
   const onBack = () => navigate(-1)
 
   const [loading, setLoading] = useState(false)
+  const [isEdit, setIsEdit] = useState(false)
 
   const { disciplinas, options } = useDisciplina()
 
   const handleDisciplinas = (discip: Array<string>) => {
-    return disciplinas.filter((obj) => discip.includes(obj.sigla));
+    return disciplinas.filter((obj) => discip.includes(obj.sigla))
   }
 
   const onSubmit = async (values: ITeacherForm) => {
@@ -59,13 +58,35 @@ function TeacherFormBody() {
         ...values,
         disciplinas: handleDisciplinas(values.disciplinas)
       }
+      const Repository = teacherId ? TeacherRepository.update(teacherId, body) : TeacherRepository.create(body)
 
-      await TeacherRepository.create(body)
+      await Repository
       navigate(Path.teacherList)
     } catch (error: any) {
       if (error.message) message.error(error.message)
     } finally { setLoading(false) }
   }
+
+  const handleSetForm = (values: ITeacher) => {
+    const disciplinas = values.disciplinas.map(item => item.sigla)
+    formRef.setFieldsValue({ ...values, disciplinas })
+  }
+
+  const findTeacher = async (teacherId: string) => {
+    setIsEdit(true)
+    try {
+      const response = await TeacherRepository.find(teacherId)
+      const data = response?.data
+      if (data) handleSetForm(data)
+    } catch (error: any) {
+      if (error.message) console.error(error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (teacherId) findTeacher(teacherId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teacherId])
 
   return (
     <Form
@@ -116,7 +137,11 @@ function TeacherFormBody() {
             label='Senha'
             name='senha'
           >
-            <Input type='password' placeholder='Insira a senha do professor' />
+            <Input
+              type='password'
+              disabled={isEdit}
+              placeholder='Insira a senha do professor'
+            />
           </Form.Item>
         </Col>
 

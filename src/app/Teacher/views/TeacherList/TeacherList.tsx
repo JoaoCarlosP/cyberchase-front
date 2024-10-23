@@ -38,11 +38,9 @@ function TeacherList() {
   }, [])
 
   const onGoToTeacherForm = (id?: string) => {
-    console.log(id)
     if (id) {
       navigate(Path.teacherForm.replace(':id?', id))
     } else {
-      console.log('Teste')
       navigate(Path.teacherForm.replace('/:id?', ''))
     }
   }

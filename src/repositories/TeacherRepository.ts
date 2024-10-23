@@ -16,9 +16,21 @@ class TeacherRepository extends Repository {
     )
   }
 
+  update = async (id: string, data: ITeacherCreate, config?: AxiosRequestConfig) => {
+    return this.handle(() =>
+      this.api.put(`${this.path}/${id}`, data, config)
+    )
+  }
+
   delete = async (questionId: string, config?: AxiosRequestConfig) => {
     return this.handle(() =>
       this.api.delete(`${this.path}/${questionId}`, config)
+    )
+  }
+
+  find = async (questionId: string, config?: AxiosRequestConfig) => {
+    return this.handle<ITeacher>(() =>
+      this.api.get(`${this.path}/${questionId}`, config)
     )
   }
 }

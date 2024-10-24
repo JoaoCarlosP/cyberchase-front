@@ -14,6 +14,12 @@ class FileRepository extends Repository {
       this.api.post(`${this.path}`, data, config)
     )
   }
+
+  find = async (fileId: string, config?: AxiosRequestConfig) => {
+    return this.handle<{ base64: string, nome: string }>(() =>
+      this.api.get(`${this.path}/${fileId}`, config)
+    )
+  }
 }
 
 export default new FileRepository({

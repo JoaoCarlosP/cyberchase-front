@@ -21,6 +21,12 @@ class QuestionRepository extends Repository {
       this.api.delete(`${this.path}/${questionId}`, config)
     )
   }
+
+  find = async (questionId: string, config?: AxiosRequestConfig) => {
+    return this.handle<IQuestionForm>(() =>
+      this.api.get(`${this.path}/${questionId}`, config)
+    )
+  }
 }
 
 export default new QuestionRepository({

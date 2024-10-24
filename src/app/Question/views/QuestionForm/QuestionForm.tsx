@@ -5,7 +5,7 @@ import { Button, Col, Form, GetProp, Image, Input, message, Radio, Row, Select, 
 import styles from './QuestionForm.module.scss'
 import defaultStyles from '../../../../styles/default.module.scss'
 import Header from "../../../../components/Header/Header"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { UploadRequestOption } from 'rc-upload/lib/interface'
 import { FileImage, FileAudio } from "@phosphor-icons/react"
 import QuestionRepository from "../../../../repositories/QuestionRepository"
@@ -13,9 +13,10 @@ import { EnumQuestionType, IQuestionForm } from "../../questionInterfaces"
 import { Path } from "../../../../routes/constants"
 import FileRepository from "../../../../repositories/FileRepository"
 import { useDisciplina } from "../../../../utils/useDisciplina"
+import { base64ToUploadFile, getFileType } from "../../../../utils/utils"
 
 function QuestionForm() {
-  const { questionId } = useParams()
+  const { questionId } = useParams<{ questionId?: string }>()
   const navigate = useNavigate()
 
   const header = {
@@ -33,7 +34,7 @@ function QuestionForm() {
         subtitle={header.subtitle}
       />
 
-      <FormBuild />
+      <FormBuild questionId={questionId} />
     </main>
   )
 }
@@ -49,7 +50,7 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error)
   })
 
-function FormBuild() {
+function FormBuild({ questionId }: { questionId?: string }) {
   const [formRef] = useForm()
   const navigate = useNavigate()
 
@@ -78,23 +79,20 @@ function FormBuild() {
       await FileRepository.create(data)
       return true
     } catch (error: any) {
-      console.log(error.message)
-      message.error(error.message)
+      console.error(error)
+      if (error.message) message.error(error.message)
     }
   }
 
   const onSubmit = async (values: IQuestionForm) => {
     setLoading(true)
     try {
-      const arquivos = []
-      if (values.I) arquivos.push(String(values.I))
-      if (values.A) arquivos.push(String(values.A))
-
       const body = {
         ...values,
         disciplina: getDisciplinaSelected(values.disciplinaValue),
         I: values.I ? 1 : 0,
         A: values.A ? 1 : 0,
+        // A rota para criar e relacionar o arquivo é outra, aqui pode enviar vazio
         arquivos: []
       }
 
@@ -127,7 +125,6 @@ function FormBuild() {
 
     if (info.fileList.length > 0) {
       const file = info.fileList[0]
-      console.log(file)
       if (!file.url && !file.preview) {
         getBase64(file.originFileObj as FileType).then((base64) => {
           file.preview = base64
@@ -186,8 +183,63 @@ function FormBuild() {
     return true
   }
 
+  const handleFile = (base64: string, fileName: string = '') => {
+    const fileType = getFileType(base64)
+    const fileObject = base64ToUploadFile(base64, fileName)
+
+    if (fileType === 'image') {
+      formRef.setFieldsValue({ I: base64 })
+      setFileListImage((prev) => {
+        const fileList = Array.isArray(prev) ? prev : []
+        return [...fileList, fileObject]
+      })
+      setPreviewImage(base64)
+    }
+    if (fileType === 'audio') {
+      formRef.setFieldsValue({ A: base64 })
+      setPreviewAudioUrl(base64)
+    }
+  }
+
+
+  const getFile = async (fileId: string) => {
+    try {
+      const response = await FileRepository.find(fileId)
+      const { base64 } = response?.data || {}
+      if (base64) handleFile(response?.data?.base64)
+    } catch (error: any) {
+      if (error.message) console.error(error.message)
+    }
+  }
+
+  const handleQuestionData = (data: IQuestionForm) => {
+    if (data.arquivos && data.arquivos.length > 0) {
+      data.arquivos.forEach(fileId => {
+        if (fileId) getFile(fileId)
+      })
+    }
+
+    formRef.setFieldsValue(data)
+  }
+
+  const getQuestionData = async (id: string) => {
+    try {
+      const response = await QuestionRepository.find(id)
+      const questionData = response?.data
+      if (questionData) handleQuestionData(questionData)
+    } catch (error: any) {
+      if (error.message) console.error(error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (questionId) getQuestionData(questionId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionId])
+
   return (
     <Form form={formRef} layout="vertical" onFinish={onSubmit}>
+      <p onClick={() => getQuestionData(questionId || '')}>Clica aqui pra buscar</p>
       <Row gutter={[20, 5]}>
         <Col span={24}>
           <h4 className={styles.title}>Dados iniciais</h4>

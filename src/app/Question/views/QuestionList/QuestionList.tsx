@@ -22,7 +22,6 @@ function QuestionList() {
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
   const onBack = () => navigate(Path.menu)
-  const onGoToCreateQuestion = () => navigate(Path.questionForm.replace('/:questionId', ''))
 
   const getQuestions = useCallback(async () => {
     try {
@@ -36,6 +35,15 @@ function QuestionList() {
     } finally { setLoading(false) }
   }, [])
 
+  const onGoToQuestionForm = (id?: string) => {
+    console.log(id)
+    if (id) {
+      navigate(Path.questionForm.replace(':questionId?', id))
+    } else {
+      navigate(Path.questionForm.replace('/:questionId?', ''))
+    }
+  }
+
   const onDelete = async (id: string) => {
     try {
       await QuestionRepository.delete(id)
@@ -48,7 +56,7 @@ function QuestionList() {
     }
   }
 
-  const columns = useQuestionColumns({ onDelete })
+  const columns = useQuestionColumns({ onDelete, onEdit: onGoToQuestionForm })
 
   useEffect(() => {
     getQuestions()
@@ -63,7 +71,7 @@ function QuestionList() {
         <TableFilters
           onSearch={(value) => console.log(value)}
           filters={<p>Aqui irá os filtros</p>}
-          onClickAdd={onGoToCreateQuestion}
+          onClickAdd={() => onGoToQuestionForm()}
         />
 
         <Table

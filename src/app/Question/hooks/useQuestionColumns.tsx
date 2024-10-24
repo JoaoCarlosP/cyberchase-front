@@ -7,7 +7,7 @@ import { Modal, Tooltip } from "antd"
 import { EnumQuestionType } from "../questionInterfaces";
 import { IDisciplina, useDisciplina } from "../../../utils/useDisciplina";
 
-const useQuestionColumns = ({ onDelete }: { onDelete: (id: string) => void }) => {
+const useQuestionColumns = ({ onDelete, onEdit }: { onDelete: (id: string) => void, onEdit: (id: string) => void }) => {
   const breakpoint = useBreakpoint()
   const { disciplinas } = useDisciplina()
 
@@ -100,7 +100,10 @@ const useQuestionColumns = ({ onDelete }: { onDelete: (id: string) => void }) =>
         return (
           <div className={styleList.actions}>
             <Tooltip title='Editar'>
-              <EditFilled style={{ color: 'var(--green-status)', cursor: 'pointer' }} />
+              <EditFilled
+                onClick={() => onEdit(String(row.id))}
+                style={{ color: 'var(--green-status)', cursor: 'pointer' }}
+              />
             </Tooltip>
 
             <Tooltip title='Deletar'>

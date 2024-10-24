@@ -189,15 +189,13 @@ function FormBuild({ questionId }: { questionId?: string }) {
 
     if (fileType === 'image') {
       formRef.setFieldsValue({ I: base64 })
-      setFileListImage((prev) => {
-        const fileList = Array.isArray(prev) ? prev : []
-        return [...fileList, fileObject]
-      })
+      setFileListImage((prev) => [...prev, fileObject])
       setPreviewImage(base64)
     }
     if (fileType === 'audio') {
       formRef.setFieldsValue({ A: base64 })
       setPreviewAudioUrl(base64)
+      setFileListAudio(prev => [...prev, fileObject])
     }
   }
 

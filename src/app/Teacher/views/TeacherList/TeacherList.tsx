@@ -23,8 +23,11 @@ function TeacherList() {
     try {
       setLoading(true)
       const response = await TeacherRepository.list()
-      if (response?.data && Array.isArray(response?.data)) setData(response?.data)
-      console.log(response?.data)
+      const teachers = response?.data
+      if (teachers && Array.isArray(teachers)) {
+        const teacherWithoutAdmin = teachers.filter(item => item.nome !== 'admin')
+        setData(teacherWithoutAdmin)
+      }
     } catch (error: any) {
       // setData(undefined)
       if (error) console.log(error)

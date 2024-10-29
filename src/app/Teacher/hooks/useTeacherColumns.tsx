@@ -2,6 +2,9 @@ import styleList from '../../Question/views/QuestionList/QuestionList.module.scs
 import { EditFilled, DeleteFilled } from '@ant-design/icons';
 import { Modal, Tooltip } from "antd"
 import dayjs from "dayjs";
+import { IDisciplina } from '../../../utils/useDisciplina';
+import DisciplinaTag from '../../../components/DisciplinaTag/DisciplinaTag';
+import TagMore from '../../../components/TagMore/TagMore';
 
 const useTeacherColumns = ({ onDelete, onEdit }: {
   onDelete: (id: string) => void,
@@ -13,20 +16,43 @@ const useTeacherColumns = ({ onDelete, onEdit }: {
       title: 'Nome',
       dataIndex: 'nome',
       ellipsis: true,
-      width: 80,
+      width: 90,
       render: (value: string) => <Tooltip title={value}>{value}</Tooltip>
     },
     {
       key: 'disciplinas',
       title: 'Disciplinas',
       dataIndex: 'disciplinas',
-      width: 80,
-      render: () => 'TODO'
+      width: 70,
+      render: (_: any, row: any) => {
+        const disciplinas = row.disciplinas as Array<IDisciplina>
+        const isMoreThanOne = disciplinas.length > 1
+        const fistDisciplina = disciplinas[0]
+        const restOfDisciplinas = disciplinas.slice(1)
+
+        return (
+          <div style={{ display: 'flex', gap: 6 }}>
+            <DisciplinaTag disciplina={fistDisciplina} />
+            {isMoreThanOne && (
+              <TagMore
+                additionalNumber={disciplinas.length - 1}
+                tooltip={
+                  <>
+                    {restOfDisciplinas.map(disciplina => (
+                      <p>{disciplina.sigla} - {disciplina.nomeCompleto}</p>
+                    ))}
+                  </>
+                }
+              />
+            )}
+          </div>
+        )
+      }
     },
     {
       key: 'email',
       title: 'email',
-      width: 100,
+      width: 90,
       dataIndex: 'email',
       ellipsis: true,
       render: (value: string) => <Tooltip title={value}>{value}</Tooltip>
@@ -35,7 +61,7 @@ const useTeacherColumns = ({ onDelete, onEdit }: {
       key: 'createdAt',
       title: 'Criado em',
       dataIndex: 'createdAt',
-      width: 60,
+      width: 50,
       render: (data: string) => dayjs(data).format('DD/MM/YYYY')
     },
     {

@@ -217,7 +217,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
       })
     }
 
-    formRef.setFieldsValue(data)
+    formRef.setFieldsValue({ ...data, disciplinaValue: data.disciplina?.sigla || '' })
   }
 
   const getQuestionData = async (id: string) => {

@@ -5,37 +5,20 @@ import QuestionListRules from "../../../Rules/QuestionListRules"
 import { EditFilled, DeleteFilled } from '@ant-design/icons';
 import { Modal, Tooltip } from "antd"
 import { EnumQuestionType } from "../questionInterfaces";
-import { IDisciplina, useDisciplina } from "../../../utils/useDisciplina";
+import { IDisciplina } from "../../../utils/useDisciplina";
+import DisciplinaTag from "../../../components/DisciplinaTag/DisciplinaTag";
 
 const useQuestionColumns = ({ onDelete, onEdit }: { onDelete: (id: string) => void, onEdit: (id: string) => void }) => {
   const breakpoint = useBreakpoint()
-  const { disciplinas } = useDisciplina()
 
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
-
-  const returnCurrentColorTag = (sigla: string = '') => {
-    const disciplina = disciplinas.find(item => item.sigla === sigla)
-    return disciplina?.cor || 'black'
-  }
 
   const columns = [
     {
       title: 'Disciplina',
       dataIndex: 'disciplina',
       width: 70,
-      render: (data: IDisciplina) => (
-        <Tooltip title={data.nomeCompleto}>
-          <span
-            className={styleList.disciplinaTag}
-            style={{
-              background: returnCurrentColorTag(data.sigla),
-              color: 'white'
-            }}
-          >
-            {data.sigla}
-          </span>
-        </Tooltip>
-      )
+      render: (data: IDisciplina) => <DisciplinaTag disciplina={data} />
     },
     {
       title: 'Identificador da pergunta',

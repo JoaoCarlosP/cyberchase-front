@@ -8,6 +8,10 @@ type IFile = {
   base64: string
 }
 
+export type IFileReceive = {
+  id: string
+} & IFile
+
 class FileRepository extends Repository {
   create = async (data: IFile, config?: AxiosRequestConfig) => {
     return this.handle(() =>
@@ -16,8 +20,14 @@ class FileRepository extends Repository {
   }
 
   find = async (fileId: string, config?: AxiosRequestConfig) => {
-    return this.handle<{ base64: string, nome: string }>(() =>
+    return this.handle<IFileReceive>(() =>
       this.api.get(`${this.path}/${fileId}`, config)
+    )
+  }
+
+  update = async (id: string, data: IFile, config?: AxiosRequestConfig) => {
+    return this.handle(() =>
+      this.api.put(`${this.path}/${id}`, data, config)
     )
   }
 }

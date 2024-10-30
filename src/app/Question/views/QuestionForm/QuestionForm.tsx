@@ -11,7 +11,7 @@ import { FileImage, FileAudio } from "@phosphor-icons/react"
 import QuestionRepository from "../../../../repositories/QuestionRepository"
 import { EnumQuestionType, IQuestionForm } from "../../questionInterfaces"
 import { Path } from "../../../../routes/constants"
-import FileRepository from "../../../../repositories/FileRepository"
+import FileRepository, { IFileReceive } from "../../../../repositories/FileRepository"
 import { useDisciplina } from "../../../../utils/useDisciplina"
 import { base64ToUploadFile, getFileType } from "../../../../utils/utils"
 
@@ -53,6 +53,7 @@ const getBase64 = (file: FileType): Promise<string> =>
 function FormBuild({ questionId }: { questionId?: string }) {
   const [formRef] = useForm()
   const navigate = useNavigate()
+  const isEdit = !!questionId
 
   const [loading, setLoading] = useState(false)
   const [previewOpen, setPreviewOpen] = useState(false)
@@ -60,6 +61,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
   const [previewAudioUrl, setPreviewAudioUrl] = useState('')
   const [fileListImage, setFileListImage] = useState<UploadFile[]>([])
   const [fileListAudio, setFileListAudio] = useState<UploadFile[]>([])
+  const [fileReceives, setFileReceives] = useState<Array<IFileReceive>>([])
 
   const { disciplinas, options } = useDisciplina()
 
@@ -68,15 +70,23 @@ function FormBuild({ questionId }: { questionId?: string }) {
     return disciplinas.find(item => item.sigla === value)
   }
 
-  const createFile = async (file: string, nome: string, questionId: string) => {
+  const submitFile = async (file: string, nome: string, questionId: string) => {
     try {
       const data = {
         pergunta: questionId,
         base64: file,
-        nome: nome
+        nome: nome || 'Novo arquivo'
       }
 
-      await FileRepository.create(data)
+      if (isEdit) {
+        const fileReceive = fileReceives.find(fileReceive => fileReceive.base64 === file)
+
+        if (!fileReceive?.id) throw new Error("Não foi possível encontrar o fileId")
+
+        await FileRepository.update(fileReceive.id, data)
+      } else {
+        await FileRepository.create(data)
+      }
       return true
     } catch (error: any) {
       console.error(error)
@@ -98,11 +108,17 @@ function FormBuild({ questionId }: { questionId?: string }) {
 
       delete body.disciplinaValue
 
-      const response: any = await QuestionRepository.create(body)
+      let response: any
+      if (isEdit) {
+        response = await QuestionRepository.update(questionId, body)
+      } else {
+        response = await QuestionRepository.create(body)
+      }
+
       const perguntaId = response?.data?.id || null
 
-      if (values.I) await createFile(String(values.I), fileListImage[0].name, perguntaId)
-      if (values.A) await createFile(String(values.A), fileListAudio[0].name, perguntaId)
+      if (values.I) await submitFile(String(values.I), fileListImage[0].name, perguntaId)
+      if (values.A) await submitFile(String(values.A), fileListAudio[0].name, perguntaId)
 
       message.success('Disciplina criada com sucesso!')
       navigate(Path.questionList)
@@ -203,8 +219,9 @@ function FormBuild({ questionId }: { questionId?: string }) {
   const getFile = async (fileId: string) => {
     try {
       const response = await FileRepository.find(fileId)
-      const { base64 } = response?.data || {}
-      if (base64) handleFile(response?.data?.base64)
+      const file = response?.data || {}
+      if (file.base64) handleFile(file.base64)
+      setFileReceives(prev => ([...prev, file]))
     } catch (error: any) {
       if (error.message) console.error(error.message)
     }

@@ -27,6 +27,12 @@ class QuestionRepository extends Repository {
       this.api.get(`${this.path}/${questionId}`, config)
     )
   }
+
+  update = async (id: string, data: IQuestionForm, config?: AxiosRequestConfig) => {
+    return this.handle(() =>
+      this.api.put(`${this.path}/${id}`, data, config)
+    )
+  }
 }
 
 export default new QuestionRepository({

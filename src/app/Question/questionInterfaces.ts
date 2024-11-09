@@ -26,4 +26,5 @@ export interface IQuestionForm {
   C_A: string
   descricao: string
   arquivos?: string[]
+  usuario: string
 }

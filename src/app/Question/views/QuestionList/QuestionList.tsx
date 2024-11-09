@@ -11,11 +11,11 @@ import Table from "../../../../components/Table/Table"
 import TableFilters from "../../../../components/TableFilters/TableFilters"
 import QuestionRepository from "../../../../repositories/QuestionRepository"
 import { message } from "antd"
+import { UserLocalStorage } from "../../../../AppConstants"
 
 function QuestionList() {
   const navigate = useNavigate()
   const breakpoint = useBreakpoint()
-
 
   const [data, setData] = useState<Array<IQuestion> | undefined>([])
   const [loading, setLoading] = useState(false)
@@ -26,13 +26,21 @@ function QuestionList() {
   const getQuestions = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await QuestionRepository.list()
+      const isAdmin = localStorage.getItem(UserLocalStorage.isAdmin) === 'true'
+
+      const params = {
+        userId: localStorage.getItem(UserLocalStorage.userId),
+        isAdmin: isAdmin
+      }
+
+      const response = await QuestionRepository.list({ params })
       if (response?.data && Array.isArray(response?.data)) setData(response?.data)
     } catch (error: any) {
       setData(undefined)
       if (error) console.log(error)
       if (error?.message) message.error(error.message)
     } finally { setLoading(false) }
+
   }, [])
 
   const onGoToQuestionForm = (id?: string) => {

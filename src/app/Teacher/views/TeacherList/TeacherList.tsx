@@ -7,7 +7,7 @@ import Table from '../../../../components/Table/Table'
 import useTeacherColumns from '../../hooks/useTeacherColumns'
 import { useCallback, useEffect, useState } from 'react'
 import { message } from 'antd'
-import TeacherRepository from '../../../../repositories/TeacherRepository'
+import UsuariosRepository from '../../../../repositories/UsuariosRepository'
 import { ITeacher } from '../../TeacherInterfaces'
 
 
@@ -22,7 +22,7 @@ function TeacherList() {
   const getTeachers = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await TeacherRepository.list()
+      const response = await UsuariosRepository.list()
       const teachers = response?.data
       if (teachers && Array.isArray(teachers)) {
         const teacherWithoutAdmin = teachers.filter(item => item.nome !== 'admin')
@@ -50,7 +50,7 @@ function TeacherList() {
 
   const onDelete = async (id: string) => {
     try {
-      await TeacherRepository.delete(id)
+      await UsuariosRepository.delete(id)
 
       message.success('Pergunta deletada com sucesso')
       getTeachers()

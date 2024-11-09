@@ -5,7 +5,7 @@ export type IDisciplina = {
 }
 
 
-export const DISCIPLINAS_OPTIONS = [
+export const DISCIPLINAS_DEFAULT = [
   { sigla: 'IAC001', nomeCompleto: 'Arquitetura e Organização de Computadores', cor: '#2F4F4F', }, // Dark Slate Gray
   { sigla: 'IAL002', nomeCompleto: 'Algoritmos e Lógica de Programação', cor: '#6A5ACD', }, // Slate Blue
   { sigla: 'ILM001', nomeCompleto: 'Programação em Microinformática', cor: '#483D8B', }, // Dark Slate Blue
@@ -57,14 +57,3 @@ export const DISCIPLINAS_OPTIONS = [
   { sigla: 'TES001', nomeCompleto: 'Estágio Supervisionado', cor: '#008080', }, // Teal
   { sigla: 'TTG103', nomeCompleto: 'Trabalho de Graduação II', cor: '#4682B4', }, // Steel Blue
 ]
-
-
-export const useDisciplina = () => {
-  const disciplinas = DISCIPLINAS_OPTIONS
-  const options = DISCIPLINAS_OPTIONS.map(item => ({ label: `${item.sigla} - ${item.nomeCompleto}`, value: item.sigla }))
-
-  return {
-    disciplinas,
-    options
-  }
-}

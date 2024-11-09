@@ -1,8 +1,7 @@
 import { Button, Col, Form, Input, message, Row, Select } from 'antd'
 import { useForm } from 'antd/es/form/Form'
-import { useDisciplina } from '../../../../utils/useDisciplina'
 import { useEffect, useState } from 'react'
-import TeacherRepository from '../../../../repositories/TeacherRepository'
+import UsuariosRepository from '../../../../repositories/UsuariosRepository'
 import { ITeacher, ITeacherForm } from '../../TeacherInterfaces'
 import { Path } from '../../../../routes/constants'
 
@@ -10,6 +9,8 @@ import { useNavigate, useParams } from "react-router-dom"
 import defaultStyles from '../../../../styles/default.module.scss'
 import Header from "../../../../components/Header/Header"
 import { CREATE_TEXT, EDIT_TEXT } from '../../TeacherConstants'
+import { DISCIPLINAS_DEFAULT } from '../../../../utils/useDisciplina'
+import { useSystem } from '../../../../hooks/useSystemContext'
 
 function TeacherForm() {
   const { id } = useParams<{ id?: string }>()
@@ -39,16 +40,16 @@ function TeacherForm() {
 function TeacherFormBody({ teacherId }: { teacherId?: string }) {
   const [formRef] = useForm()
   const navigate = useNavigate()
+  const { disciplinaOptions } = useSystem()
 
   const onBack = () => navigate(-1)
 
   const [loading, setLoading] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
 
-  const { disciplinas, options } = useDisciplina()
 
   const handleDisciplinas = (discip: Array<string>) => {
-    return disciplinas.filter((obj) => discip.includes(obj.sigla))
+    return DISCIPLINAS_DEFAULT.filter((obj) => discip.includes(obj.sigla))
   }
 
   const onSubmit = async (values: ITeacherForm) => {
@@ -58,7 +59,7 @@ function TeacherFormBody({ teacherId }: { teacherId?: string }) {
         ...values,
         disciplinas: handleDisciplinas(values.disciplinas)
       }
-      const Repository = teacherId ? TeacherRepository.update(teacherId, body) : TeacherRepository.create(body)
+      const Repository = teacherId ? UsuariosRepository.update(teacherId, body) : UsuariosRepository.create(body)
 
       await Repository
       navigate(Path.teacherList)
@@ -75,7 +76,7 @@ function TeacherFormBody({ teacherId }: { teacherId?: string }) {
   const findTeacher = async (teacherId: string) => {
     setIsEdit(true)
     try {
-      const response = await TeacherRepository.find(teacherId)
+      const response = await UsuariosRepository.find(teacherId)
       const data = response?.data
       if (data) handleSetForm(data)
     } catch (error: any) {
@@ -114,7 +115,7 @@ function TeacherFormBody({ teacherId }: { teacherId?: string }) {
               showSearch
               mode='multiple'
               maxTagCount={1}
-              options={options}
+              options={disciplinaOptions}
               maxTagTextLength={40}
               optionFilterProp="label"
               placeholder='Escolha a disciplina'

@@ -1,16 +1,31 @@
-import { Button } from 'antd'
+import { Button, Modal } from 'antd'
 import styles from './Menu.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { Path } from '../../routes/constants'
+import { UserLocalStorage } from '../../AppConstants'
+import { useMemo } from 'react'
 
 function Menu() {
   const navigate = useNavigate()
 
-  const onLogout = () => navigate(Path.unauth)
+  const onLogout = () => {
+    Modal.confirm({
+      title: 'Confirmação',
+      content: 'Tem certeza que deseja sair do sistema?',
+      onOk: () => {
+        localStorage.clear()
+        navigate(Path.unauth)
+      }
+    })
+  }
 
   const navigateToQuestionList = () => navigate(Path.questionList)
   const navigateToQuestionForm = () => navigate(Path.questionForm)
   const navigateToTeacherList = () => navigate(Path.teacherList)
+
+  const isAdmin = useMemo(() => {
+    return localStorage.getItem(UserLocalStorage.isAdmin) === 'true'
+  }, [])
 
   return (
     <main className={styles.container}>
@@ -22,13 +37,15 @@ function Menu() {
           Listagem de perguntas
         </Button>
 
-        {/* <Button type='default' className={styles.secondButton} onClick={navigateToQuestionForm}>
-          Adicionar nova pergunta
-        </Button> */}
-
-        <Button type='default' className={styles.secondButton} onClick={navigateToTeacherList}>
-          Listagem de Professores
-        </Button>
+        {isAdmin ? (
+          <Button type='default' className={styles.secondButton} onClick={navigateToTeacherList}>
+            Listagem de Professores
+          </Button>
+        ) : (
+          <Button type='default' className={styles.secondButton} onClick={navigateToQuestionForm}>
+            Adicionar nova pergunta
+          </Button>
+        )}
 
         <Button
           type='link'

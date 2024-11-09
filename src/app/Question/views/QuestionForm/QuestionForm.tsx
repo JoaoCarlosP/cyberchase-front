@@ -12,8 +12,10 @@ import QuestionRepository from "../../../../repositories/QuestionRepository"
 import { EnumQuestionType, IQuestionForm } from "../../questionInterfaces"
 import { Path } from "../../../../routes/constants"
 import FileRepository, { IFileReceive } from "../../../../repositories/FileRepository"
-import { useDisciplina } from "../../../../utils/useDisciplina"
 import { base64ToUploadFile, getFileType } from "../../../../utils/utils"
+import { UserLocalStorage } from "../../../../AppConstants"
+import { useSystem } from "../../../../hooks/useSystemContext"
+import { DISCIPLINAS_DEFAULT } from "../../../../utils/useDisciplina"
 
 function QuestionForm() {
   const { questionId } = useParams<{ questionId?: string }>()
@@ -63,11 +65,11 @@ function FormBuild({ questionId }: { questionId?: string }) {
   const [fileListAudio, setFileListAudio] = useState<UploadFile[]>([])
   const [fileReceives, setFileReceives] = useState<Array<IFileReceive>>([])
 
-  const { disciplinas, options } = useDisciplina()
+  const { disciplinaOptions } = useSystem()
 
   const getDisciplinaSelected = (value?: string) => {
     if (!value) return
-    return disciplinas.find(item => item.sigla === value)
+    return DISCIPLINAS_DEFAULT.find(item => item.sigla === value)
   }
 
   const submitFile = async (file: string, nome: string, questionId: string) => {
@@ -103,7 +105,8 @@ function FormBuild({ questionId }: { questionId?: string }) {
         I: values.I ? 1 : 0,
         A: values.A ? 1 : 0,
         // A rota para criar e relacionar o arquivo é outra, aqui pode enviar vazio
-        arquivos: []
+        arquivos: [],
+        usuario: String(localStorage.getItem(UserLocalStorage.userId))
       }
 
       delete body.disciplinaValue
@@ -278,7 +281,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
               showSearch
               optionFilterProp="label"
               placeholder='Escolha a disciplina'
-              options={options}
+              options={disciplinaOptions}
             />
           </Form.Item>
         </Col>

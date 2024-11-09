@@ -1,9 +1,13 @@
 import { useForm } from 'antd/es/form/Form'
 import styles from './UnauthPage.module.scss'
-import { Button, Col, Form, Input, Row } from 'antd'
+import { Button, Col, Form, Input, message, Row } from 'antd'
 // import UnauthRepository from '../../repositories/UnauthRepository'
 import { useNavigate } from 'react-router-dom'
 import { Path } from '../../routes/constants'
+import UsuariosRepository from '../../repositories/UsuariosRepository'
+import { UserLocalStorage } from '../../AppConstants'
+import { useSystem } from '../../hooks/useSystemContext'
+import { DISCIPLINAS_DEFAULT } from '../../utils/useDisciplina'
 
 function UnauthPage() {
   return (
@@ -28,8 +32,24 @@ function UnauthPage() {
 function LoginSection() {
   const [formRef] = useForm()
   const navigate = useNavigate()
+  const { setDisciplinas } = useSystem()
 
-  const onSubmit = () => navigate(Path.menu)
+  const onSubmit = async (values: { email: string, password: string }) => {
+    try {
+      const response = await UsuariosRepository.authenticate(values.email, values.password)
+      const isAdmin = Boolean(response?.data?.isAdmin)
+
+      if (response.data.id) {
+        localStorage.setItem(UserLocalStorage.userId, response.data.id)
+        localStorage.setItem(UserLocalStorage.isAdmin, String(isAdmin))
+      }
+
+      setDisciplinas(isAdmin ? DISCIPLINAS_DEFAULT : response?.data?.disciplinas || [])
+      navigate(Path.menu)
+    } catch (error: any) {
+      if (error.message) message.error(error.message)
+    }
+  }
 
   return (
     <Form

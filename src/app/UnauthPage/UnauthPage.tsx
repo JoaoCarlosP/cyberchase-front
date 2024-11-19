@@ -34,6 +34,15 @@ function LoginSection() {
   const navigate = useNavigate()
   const { setDisciplinas } = useSystem()
 
+  const onAccessGame = () => {
+    const a = document.createElement('a')
+    a.target = '_blank'
+    a.rel = 'noreferrer'
+    a.href = 'http://localhost:8080/game'
+
+    a.click()
+  }
+
   const onSubmit = async (values: { email: string, password: string }) => {
     try {
       const response = await UsuariosRepository.authenticate(values.email, values.password)
@@ -103,7 +112,7 @@ function LoginSection() {
 
         <aside className={styles.dividerContainer}>
           <div className={styles.divider}></div>
-          <span className={styles.alternativeAccess}>Ou baixe o jogo!</span>
+          <span className={styles.alternativeAccess}>Ou acesse o jogo!</span>
           <div className={styles.divider}></div>
         </aside>
 
@@ -111,8 +120,9 @@ function LoginSection() {
           type='default'
           htmlType="button"
           className={styles.downloadGameButton}
+          onClick={onAccessGame}
         >
-          Baixar jogo
+          Acessar o Jogo
         </Button>
       </section>
     </Form>

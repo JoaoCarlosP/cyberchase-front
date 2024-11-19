@@ -8,6 +8,7 @@ import UsuariosRepository from '../../repositories/UsuariosRepository'
 import { UserLocalStorage } from '../../AppConstants'
 import { useSystem } from '../../hooks/useSystemContext'
 import { DISCIPLINAS_DEFAULT } from '../../utils/useDisciplina'
+import { useState } from 'react'
 
 function UnauthPage() {
   return (
@@ -34,6 +35,8 @@ function LoginSection() {
   const navigate = useNavigate()
   const { setDisciplinas } = useSystem()
 
+  const [loading, setLoading] = useState(false)
+
   const onAccessGame = () => {
     const a = document.createElement('a')
     a.target = '_blank'
@@ -44,7 +47,9 @@ function LoginSection() {
   }
 
   const onSubmit = async (values: { email: string, password: string }) => {
+    setLoading(false)
     try {
+      setLoading(true)
       const response = await UsuariosRepository.authenticate(values.email, values.password)
       const isAdmin = Boolean(response?.data?.isAdmin)
 
@@ -57,7 +62,7 @@ function LoginSection() {
       navigate(Path.menu)
     } catch (error: any) {
       if (error.message) message.error(error.message)
-    }
+    } finally { setLoading(false) }
   }
 
   return (
@@ -106,6 +111,7 @@ function LoginSection() {
           type='primary'
           htmlType="submit"
           className={styles.loginButton}
+          loading={loading}
         >
           Entrar
         </Button>

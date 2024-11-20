@@ -265,6 +265,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
 
         <Col span={24}>
           <Form.Item
+            required
             name='descricao'
             label='Identificador da pergunta'
           >
@@ -274,6 +275,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
 
         <Col xs={24} md={12}>
           <Form.Item
+            required
             name='disciplinaValue'
             label='Disciplina'
           >
@@ -288,14 +290,15 @@ function FormBuild({ questionId }: { questionId?: string }) {
 
         <Col xs={24} md={12}>
           <Form.Item
+            required
             name='tipo'
             label='Tipo de pergunta'
           >
             <Select
               placeholder='Escolha o tipo de pergunta'
               options={[
-                { label: 'Pergunta de Avaliação', value: EnumQuestionType.PA },
-                { label: 'Pergunta de Exercício', value: EnumQuestionType.PE }
+                { label: 'Pergunta de Ensino', value: EnumQuestionType.PerguntaEnsino },
+                { label: 'Pergunta de Exercício', value: EnumQuestionType.PerguntaExercicio }
               ]}
             />
           </Form.Item>
@@ -308,6 +311,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
         <Col xs={24} md={12}>
           <Form.Item
             name='I'
+            required
             label='Imagem'
           >
             <Upload
@@ -353,6 +357,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
 
         <Col xs={24} md={12}>
           <Form.Item
+            required
             name='A'
             label='Áudio'
           >
@@ -396,7 +401,10 @@ function FormBuild({ questionId }: { questionId?: string }) {
         <Col xs={24} md={12} className={styles.item}>
           <h4 className={styles.title}>Alternativa correta</h4>
 
-          <Form.Item name='C_A'>
+          <Form.Item
+            name='C_A'
+            required
+          >
             <Radio.Group
               className={styles.radioGroup}
               options={ALTERNATIVES}
@@ -405,8 +413,11 @@ function FormBuild({ questionId }: { questionId?: string }) {
         </Col>
 
         <Col xs={24} md={12} className={styles.item}>
-          <h4 className={styles.title}>Tempo (em segundos) - Opcional</h4>
-          <Form.Item name='T'>
+          <h4 className={styles.title}>Tempo (em segundos)</h4>
+          <Form.Item
+            name='T'
+            required
+          >
             <Input placeholder="Em segundos..." type='number' />
           </Form.Item>
         </Col>

@@ -1,8 +1,8 @@
 import { IDisciplina } from "../../utils/useDisciplina"
 
 export enum EnumQuestionType {
-  PA = 'avaliacao',
-  PE = 'exercicio'
+  PerguntaEnsino = 'ensino',
+  PerguntaExercicio = 'exercicio'
 }
 
 export type IQuestion = {

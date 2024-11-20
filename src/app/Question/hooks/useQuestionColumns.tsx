@@ -37,35 +37,35 @@ const useQuestionColumns = ({ onDelete, onEdit }: { onDelete: (id: string) => vo
     },
     {
       title: 'Tipo',
-      width: 50,
+      width: 80,
       dataIndex: 'tipo',
       render: (value: EnumQuestionType) => {
         switch (value) {
-          case EnumQuestionType.PA:
-            return <Tooltip title='Pergunta de avaliação'><span className={styleList.tipo}>PA</span></Tooltip>
-          case EnumQuestionType.PE:
-            return <Tooltip title='Pergunta de exercicio'><span className={styleList.tipo}>PE</span></Tooltip>
+          case EnumQuestionType.PerguntaEnsino:
+            return <Tooltip title='Pergunta de ensino'><span className={styleList.tipo}>Ensino</span></Tooltip>
+          case EnumQuestionType.PerguntaExercicio:
+            return <Tooltip title='Pergunta de exercicio'><span className={styleList.tipo}>Exercício</span></Tooltip>
           default: return 'N/A'
         }
       }
     },
     {
       title: 'Imagem',
-      dataIndex: 'imagem',
+      dataIndex: 'I',
       width: 60,
-      render: (data: boolean) => data ? 'Sim' : 'Não'
+      render: (data: number) => data === 1 ? 'Sim' : 'Não'
     },
     {
       title: 'Áudio',
-      dataIndex: 'audio',
+      dataIndex: 'A',
       width: 60,
-      render: (data: boolean) => data ? 'Sim' : 'Não'
+      render: (data: number) => data === 1 ? 'Sim' : 'Não'
     },
     {
       title: 'Tempo',
-      dataIndex: 'tempo',
+      dataIndex: 'T',
       width: 60,
-      render: (data: boolean) => data ? 'Sim' : 'Não'
+      render: (data: number) => data >= 1 ? 'Sim' : 'Não'
     },
     {
       title: 'Ações',

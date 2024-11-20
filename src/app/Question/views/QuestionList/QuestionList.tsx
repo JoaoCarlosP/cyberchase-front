@@ -23,14 +23,15 @@ function QuestionList() {
   const canUseScroll = useMemo(() => QuestionListRules.canEnableTableScroll(breakpoint), [breakpoint])
   const onBack = () => navigate(Path.menu)
 
-  const getQuestions = useCallback(async () => {
+  const getQuestions = useCallback(async (descricao?: string) => {
     try {
       setLoading(true)
       const isAdmin = localStorage.getItem(UserLocalStorage.isAdmin) === 'true'
 
       const params = {
         userId: localStorage.getItem(UserLocalStorage.userId),
-        isAdmin: isAdmin
+        isAdmin: isAdmin,
+        descricao
       }
 
       const response = await QuestionRepository.list({ params })
@@ -44,7 +45,6 @@ function QuestionList() {
   }, [])
 
   const onGoToQuestionForm = (id?: string) => {
-    console.log(id)
     if (id) {
       navigate(Path.questionForm.replace(':questionId?', id))
     } else {
@@ -66,6 +66,10 @@ function QuestionList() {
 
   const columns = useQuestionColumns({ onDelete, onEdit: onGoToQuestionForm })
 
+  const onSearch = (descricao: string) => {
+    getQuestions(descricao)
+  }
+
   useEffect(() => {
     getQuestions()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,8 +81,7 @@ function QuestionList() {
         <Header title="Perguntas" subtitle="As perguntas de ensino têm como objetivo ajudar o aluno a aprender novos conceitos abordados em sala de aula." onBack={onBack} ></Header>
 
         <TableFilters
-          onSearch={(value) => console.log(value)}
-          filters={<p>Aqui irá os filtros</p>}
+          onSearch={onSearch}
           onClickAdd={() => onGoToQuestionForm()}
         />
 

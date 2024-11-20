@@ -1,5 +1,4 @@
-import { FunnelSimple } from '@phosphor-icons/react'
-import { Button, Dropdown, Input } from 'antd'
+import { Button, Input } from 'antd'
 import React from 'react'
 
 import styles from './TableFilters.module.scss'
@@ -10,7 +9,7 @@ interface ITableFiltersProps {
   onClickAdd: () => void
 }
 
-function TableFilters({ onSearch, filters, onClickAdd }: ITableFiltersProps) {
+function TableFilters({ onSearch, onClickAdd }: ITableFiltersProps) {
   return (
     <section className={styles.container}>
       <Input.Search
@@ -21,7 +20,7 @@ function TableFilters({ onSearch, filters, onClickAdd }: ITableFiltersProps) {
       />
 
       <div className={styles.buttons}>
-        {filters && <Dropdown trigger={['click']} dropdownRender={() => (
+        {/* {filters && <Dropdown trigger={['click']} dropdownRender={() => (
           <article className={styles.dropdawnFilters}>
             {filters}
           </article>
@@ -29,7 +28,7 @@ function TableFilters({ onSearch, filters, onClickAdd }: ITableFiltersProps) {
           <Button type='default' className={styles.buttonFilter} onClick={(e) => e.preventDefault()}>
             <FunnelSimple size={18} />
           </Button>
-        </Dropdown>}
+        </Dropdown>} */}
 
         <Button type="primary" className={styles.buttonAddMore} onClick={onClickAdd}>
           Adicionar

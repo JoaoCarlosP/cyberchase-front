@@ -17,7 +17,7 @@ const useQuestionColumns = ({ onDelete, onEdit }: { onDelete: (id: string) => vo
     {
       title: 'Disciplina',
       dataIndex: 'disciplina',
-      width: 70,
+      width: 85,
       render: (data: IDisciplina) => <DisciplinaTag disciplina={data} />
     },
     {

@@ -100,14 +100,6 @@ function LoginSection() {
         </Form.Item>
 
         <Button
-          type='link'
-          htmlType='button'
-          className={styles.forgotPasswordButton}
-        >
-          Esqueci minha senha
-        </Button>
-
-        <Button
           type='primary'
           htmlType="submit"
           className={styles.loginButton}

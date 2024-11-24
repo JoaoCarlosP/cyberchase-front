@@ -36,10 +36,8 @@ export const base64ToUploadFile = (base64Data: string, fileName: string): Upload
 
 export const getFileType = (base64Data: string): 'image' | 'audio' | 'unknown' => {
   const mimeTypeMatch = base64Data.match(/^data:(.+?)base64,/)
-  console.log(mimeTypeMatch)
   if (mimeTypeMatch && mimeTypeMatch[1]) {
     const mimeType = mimeTypeMatch[1]
-    console.log(mimeType)
     if (mimeType.startsWith("image")) {
       return "image"
     } else if (mimeType.startsWith("audio")) {

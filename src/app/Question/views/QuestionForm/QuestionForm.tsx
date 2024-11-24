@@ -237,7 +237,7 @@ function FormBuild({ questionId }: { questionId?: string }) {
       })
     }
 
-    formRef.setFieldsValue({ ...data, disciplinaValue: data.disciplina?.sigla || '' })
+    formRef.setFieldsValue({ ...data, disciplinaValue: data.disciplina?.sigla || '', T: Number(data?.T)/60 })
   }
 
   const getQuestionData = async (id: string) => {
@@ -357,7 +357,6 @@ function FormBuild({ questionId }: { questionId?: string }) {
 
         <Col xs={24} md={12}>
           <Form.Item
-            required
             name='A'
             label='Áudio'
           >

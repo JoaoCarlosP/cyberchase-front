@@ -24,7 +24,7 @@ const useQuestionColumns = ({ onDelete, onEdit }: { onDelete: (id: string) => vo
       title: 'Identificador da pergunta',
       dataIndex: 'descricao',
       ellipsis: true,
-      width: 250,
+      width: 230  ,
       render: (data: string) => {
         if (canUseScroll) {
           return (
@@ -65,7 +65,7 @@ const useQuestionColumns = ({ onDelete, onEdit }: { onDelete: (id: string) => vo
       title: 'Tempo',
       dataIndex: 'T',
       width: 60,
-      render: (data: number) => data >= 1 ? 'Sim' : 'Não'
+      render: (data: number) => data >= 1 ? data/60 + 's' : 'Não'
     },
     {
       title: 'Ações',

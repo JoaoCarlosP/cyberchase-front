@@ -9,9 +9,9 @@ export const EDIT_TEXT = {
 }
 
 export const ALTERNATIVES = [
-  { label: 'Alternativa A', value: 'a' },
-  { label: 'Alternativa B', value: 'b' },
-  { label: 'Alternativa C', value: 'c' },
-  { label: 'Alternativa D', value: 'd' },
-  { label: 'Alternativa E', value: 'e' },
+  { label: 'Alternativa A', value: 'A' },
+  { label: 'Alternativa B', value: 'B' },
+  { label: 'Alternativa C', value: 'C' },
+  { label: 'Alternativa D', value: 'D' },
+  { label: 'Alternativa E', value: 'E' },
 ]

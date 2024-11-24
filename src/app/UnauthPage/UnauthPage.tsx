@@ -90,7 +90,7 @@ function LoginSection() {
         <Form.Item
           label='Senha'
           name='password'
-          style={{ marginBottom: 8 }}
+          style={{ marginBottom: 32 }}
         >
           <Input
             required

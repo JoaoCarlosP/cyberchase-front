@@ -83,7 +83,12 @@ function FormBuild({ questionId }: { questionId?: string }) {
       nome: nome || 'Novo arquivo'
     }
 
-    await FileRepository.update(fileId, data)
+    try {
+      await FileRepository.update(fileId, data)
+      message.success('Arquivo alterado com sucesso!')
+    } catch (error: any) {
+      message.error(error.message || 'Erro ao salvar novo arquivo')
+    }
   }
 
   const submitFile = async (file: string, nome: string, questionId: string) => {
@@ -153,7 +158,6 @@ function FormBuild({ questionId }: { questionId?: string }) {
     if (info.fileList.length > 0) {
       const file = info.fileList[0]
       if (!file.url && !file.preview) {
-        console.log(file)
         getBase64(file.originFileObj as FileType).then((base64) => {
           file.preview = base64
           setPreviewImage(base64)
